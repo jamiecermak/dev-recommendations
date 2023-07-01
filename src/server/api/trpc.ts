@@ -9,10 +9,9 @@
 
 import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { type Session } from "next-auth";
+import { type AuthObject, getAuth, clerkClient, type User as ClerkUser } from "@clerk/nextjs/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
 
 /**
@@ -24,7 +23,8 @@ import { prisma } from "~/server/db";
  */
 
 type CreateContextOptions = {
-  session: Session | null;
+  auth: AuthObject;
+  clerkUser: ClerkUser | null;
 };
 
 /**
@@ -39,7 +39,8 @@ type CreateContextOptions = {
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
-    session: opts.session,
+    auth: opts.auth,
+    clerkUser: opts.clerkUser,
     prisma,
   };
 };
@@ -51,13 +52,14 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  * @see https://trpc.io/docs/context
  */
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { req, res } = opts;
-
-  // Get the session from the server using the getServerSession wrapper function
-  const session = await getServerAuthSession({ req, res });
-
+  const { req } = opts;
+  
+  const auth = getAuth(req);
+  const clerkUser = auth.userId ? await clerkClient.users.getUser(auth.userId) : null;
+  
   return createInnerTRPCContext({
-    session,
+    auth,
+    clerkUser
   });
 };
 
@@ -108,14 +110,16 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
+  if (!ctx.auth || !ctx.auth.userId || ctx.clerkUser === null) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
-    },
+      auth: { ...ctx.auth },
+      clerkUser: { ...ctx.clerkUser },
+    }
   });
 });
 
