@@ -13,6 +13,12 @@ const config = {
         project: path.join(__dirname, "tsconfig.json"),
       },
     },
+    {
+      files: ["*.test.ts", "*.test.tsx"],
+      rules: {
+        '@typescript-eslint/unbound-method': 'off'
+      },
+    }
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
