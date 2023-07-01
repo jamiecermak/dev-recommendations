@@ -9,11 +9,12 @@
 
 import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { type AuthObject, getAuth, clerkClient, type User as ClerkUser } from "@clerk/nextjs/server";
+import { type AuthObject, getAuth, clerkClient } from "@clerk/nextjs/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
 import { ClerkUserService } from "../core/clerk-user-service";
+import { User } from "@prisma/client";
 
 /**
  * 1. CONTEXT
@@ -25,7 +26,6 @@ import { ClerkUserService } from "../core/clerk-user-service";
 
 type CreateContextOptions = {
   auth: AuthObject;
-  clerkUser: ClerkUser | null;
 };
 
 /**
@@ -41,7 +41,6 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     auth: opts.auth,
-    clerkUser: opts.clerkUser,
     prisma,
   };
 };
@@ -52,15 +51,11 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;
-  
-  const auth = getAuth(req);
-  const clerkUser = auth.userId ? await clerkClient.users.getUser(auth.userId) : null;
-  
+
   return createInnerTRPCContext({
-    auth,
-    clerkUser
+    auth: getAuth(req),
   });
 };
 
@@ -111,18 +106,26 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.auth || !ctx.auth.userId || ctx.clerkUser === null) {
+  const clerkUser = ctx.auth.userId ? await clerkClient.users.getUser(ctx.auth.userId) : null;
+
+  if (!ctx.auth || !ctx.auth.userId || clerkUser === null) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
-  const clerkUserService = new ClerkUserService(prisma)
-  const user = await clerkUserService.getOrCreateFromClerkUserId(ctx.auth.userId);
+  let user: User;
+
+  try {
+    const clerkUserService = new ClerkUserService(prisma)
+    user = await clerkUserService.getOrCreateFromClerkUserId(ctx.auth.userId);
+  } catch {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
 
   return next({
     ctx: {
       // infers the `session` as non-nullable
       auth: { ...ctx.auth },
-      clerkUser: { ...ctx.clerkUser },
+      clerkUser: { ...clerkUser },
       user: {...user}
     }
   });

@@ -9,6 +9,12 @@ class TeamsService {
         name,
         ownedByUserId: createdByUser.id,
         createdByUserId: createdByUser.id,
+        teamMembers: {
+            create: {
+                isAdmin: true,
+                userId: createdByUser.id
+            }
+        }
       },
     });
 

@@ -30,6 +30,12 @@ describe("creating a team", () => {
         name: "My Awesome Team",
         createdByUserId: userFixture.id,
         ownedByUserId: userFixture.id,
+        teamMembers: {
+          create: {
+            isAdmin: true,
+            userId: userFixture.id,
+          },
+        },
       },
     });
   });
@@ -43,10 +49,10 @@ describe("getting a team", () => {
 
     expect(newTeam).toMatchObject(teamFixture);
     expect(mockPrisma.team.findFirst).toHaveBeenCalledWith({
-        where: {
-          id: "team-id",
-        },
-      });
+      where: {
+        id: "team-id",
+      },
+    });
   });
 
   it("should return null if it cannot find the team", async () => {

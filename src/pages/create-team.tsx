@@ -20,6 +20,7 @@ import {
 } from "~/components/ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/router";
 
 const formSchema = z.object({
   name: z
@@ -38,6 +39,7 @@ type CreateTeamFormValues = z.infer<typeof formSchema>;
 
 export default function CreateTeamPage() {
   const mutation = api.teams.createTeam.useMutation();
+  const router = useRouter()
   const form = useForm<CreateTeamFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,7 +48,9 @@ export default function CreateTeamPage() {
   });
 
   const onSubmit = (data: CreateTeamFormValues) => {
-    mutation.mutate(data);
+    mutation.mutate(data, {
+        onSuccess: (newTeam) => router.push(`/team/${newTeam.id}`)
+    });
   };
 
   return (
