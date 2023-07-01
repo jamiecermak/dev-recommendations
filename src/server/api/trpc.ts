@@ -13,6 +13,7 @@ import { type AuthObject, getAuth, clerkClient, type User as ClerkUser } from "@
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
+import { ClerkUserService } from "../core/clerk-user-service";
 
 /**
  * 1. CONTEXT
@@ -109,16 +110,20 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
-const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   if (!ctx.auth || !ctx.auth.userId || ctx.clerkUser === null) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
+  const clerkUserService = new ClerkUserService(prisma)
+  const user = await clerkUserService.getOrCreateFromClerkUserId(ctx.auth.userId);
 
   return next({
     ctx: {
       // infers the `session` as non-nullable
       auth: { ...ctx.auth },
       clerkUser: { ...ctx.clerkUser },
+      user: {...user}
     }
   });
 });
