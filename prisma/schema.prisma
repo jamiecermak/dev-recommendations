@@ -19,3 +19,12 @@ model User {
 
     @@unique(clerkId)
 }
+
+model Team {
+    id String @id @default(cuid())
+    name String
+    createdByUserId String
+    ownedByUserId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

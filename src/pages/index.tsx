@@ -7,15 +7,13 @@ import {
 } from '~/components/ui/card';
 import { Button } from '~/components/ui/button';
 import { SignInButton, SignUpButton, useAuth } from '@clerk/nextjs';
-import { ReloadIcon } from '@radix-ui/react-icons';
 
 function SignInCardFooter({ children }: { children: React.ReactNode }) {
     const auth = useAuth();
 
     if (!auth.isLoaded) {
         return (
-            <Button size="lg" className="w-96" disabled>
-                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            <Button size="lg" className="w-96" isLoading>
                 Please wait
             </Button>
         );
