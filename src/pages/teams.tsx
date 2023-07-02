@@ -20,10 +20,10 @@ export default function CreateTeamPage() {
         <title>My Teams</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppHeaderLayout>
+      <AppHeaderLayout header="Your Teams" aside={<Button>Create Team</Button>}>
         <Card className="p-5">
           <CardHeader className="pb-0">
-            <h1 className="scroll-m-20 text-center text-2xl font-extrabold tracking-tight lg:text-3xl">
+            <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-3xl">
               Create Team
             </h1>
           </CardHeader>
