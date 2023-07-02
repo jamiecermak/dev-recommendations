@@ -68,13 +68,16 @@ class InviteCodeService {
 
     await this.teamMemberService.addUserToTeam(inviteCode.team, usedByUser);
 
-    await this.prisma.inviteCode.update({
+    return this.prisma.inviteCode.update({
       data: {
         isUsed: true,
         usedAt: new Date(),
       },
       where: {
         id: inviteCode.id,
+      },
+      include: {
+        team: true,
       },
     });
   }

@@ -168,14 +168,16 @@ describe("using an invite code", () => {
       teamFixture,
       userFixture
     );
-    expect(mockPrisma.inviteCode.update).toHaveBeenCalledWith({
-      data: {
-        isUsed: true,
-        usedAt: new Date("2020-01-01"),
-      },
-      where: {
-        id: "invite-code-id",
-      },
-    });
+    expect(mockPrisma.inviteCode.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: {
+          isUsed: true,
+          usedAt: new Date("2020-01-01"),
+        },
+        where: {
+          id: "invite-code-id",
+        },
+      })
+    );
   });
 });

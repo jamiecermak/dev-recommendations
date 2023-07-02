@@ -20,6 +20,8 @@ import type {
 } from "next";
 import { getServices } from "~/server/service-builder";
 import { prisma } from "~/server/db";
+import { api } from "~/utils/api";
+import { useRouter } from "next/router";
 
 function SignInCardFooter({ children }: { children: React.ReactNode }) {
   const auth = useAuth();
@@ -96,7 +98,13 @@ export const getServerSideProps: GetServerSideProps<{
 
 export default function JoinTeamPage({
   team,
+  token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+  const mutation = api.teams.joinTeam.useMutation({
+    onSuccess: (team) => router.push(`/team/${team.id}`),
+  });
+
   return (
     <>
       <Head>
@@ -122,7 +130,11 @@ export default function JoinTeamPage({
           </CardContent>
           <CardFooter className="flex flex-col justify-center gap-5">
             <SignInCardFooter>
-              <Button size="lg" className="w-96">
+              <Button
+                size="lg"
+                className="w-96"
+                onClick={() => mutation.mutate({ token })}
+              >
                 Join now
               </Button>
             </SignInCardFooter>
