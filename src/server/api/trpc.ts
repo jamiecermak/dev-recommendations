@@ -14,7 +14,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
 import { ClerkUserService } from "../core/clerk-user-service";
-import { User } from "@prisma/client";
+import { getServices } from "../service-builder";
 
 /**
  * 1. CONTEXT
@@ -95,6 +95,42 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
  */
 export const createTRPCRouter = t.router;
 
+function getUserById(userId: string | null) {
+  try {
+    const clerkUserService = new ClerkUserService(prisma, clerkClient.users);
+    return clerkUserService.authenticateById(userId);
+  } catch {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+}
+
+/** Reusable middleware that enforces users are logged in before running the procedure. */
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.auth || !ctx.auth.userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  const [user, clerkUser] = await getUserById(ctx.auth.userId);
+
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      auth: { ...ctx.auth },
+      clerkUser: { ...clerkUser },
+      user: { ...user },
+    },
+  });
+});
+
+const serviceInjector = t.middleware(({ ctx, next }) => {
+  return next({
+    ctx: {
+      ...ctx,
+      services: getServices(),
+    },
+  });
+});
+
 /**
  * Public (unauthenticated) procedure
  *
@@ -102,34 +138,7 @@ export const createTRPCRouter = t.router;
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure;
-
-/** Reusable middleware that enforces users are logged in before running the procedure. */
-const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
-  const clerkUser = ctx.auth.userId ? await clerkClient.users.getUser(ctx.auth.userId) : null;
-
-  if (!ctx.auth || !ctx.auth.userId || clerkUser === null) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-
-  let user: User;
-
-  try {
-    const clerkUserService = new ClerkUserService(prisma)
-    user = await clerkUserService.getOrCreateFromClerkUserId(ctx.auth.userId);
-  } catch {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-
-  return next({
-    ctx: {
-      // infers the `session` as non-nullable
-      auth: { ...ctx.auth },
-      clerkUser: { ...clerkUser },
-      user: {...user}
-    }
-  });
-});
+export const publicProcedure = t.procedure.use(serviceInjector);
 
 /**
  * Protected (authenticated) procedure
@@ -139,4 +148,6 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedProcedure = t.procedure
+  .use(enforceUserIsAuthed)
+  .use(serviceInjector);

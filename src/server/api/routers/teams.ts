@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { TeamsService } from "~/server/core/teams-service";
 
 export const teamsRouter = createTRPCRouter({
   createTeam: protectedProcedure
@@ -10,19 +9,39 @@ export const teamsRouter = createTRPCRouter({
       })
     )
     .mutation(({ ctx, input }) => {
-        const teamsService = new TeamsService(ctx.prisma);
-
-        return teamsService.createTeam(input.name, ctx.user)
+      return ctx.services.teams.createTeam(input.name, ctx.user);
     }),
   getTeamById: protectedProcedure
     .input(
       z.object({
-        id: z.string().max(50, "Must be less than 50 characters"),
+        id: z.string(),
       })
     )
-    .query(({ ctx, input }) => {
-        const teamsService = new TeamsService(ctx.prisma);
+    .query(async ({ ctx, input }) => {
+      const { team } =
+        await ctx.services.authGuard.authoriseByTeamMemberWithUser(
+          ctx.user,
+          input.id
+        );
 
-        return teamsService.getByIdOrThrow(input.id)
+      return team;
+    }),
+  getMyTeams: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.services.teamMember.getAllByUser(ctx.user);
+  }),
+  getTeamMembersById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { teamMemberPolicy } =
+        await ctx.services.authGuard.authoriseByTeamMemberWithUser(
+          ctx.user,
+          input.id
+        );
+
+      return teamMemberPolicy.getAll();
     }),
 });
