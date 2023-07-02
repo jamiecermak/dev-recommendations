@@ -15,20 +15,22 @@ import type {
 } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { getServices } from "~/server/service-builder";
+import { prisma } from "~/server/db";
+import { clerkClient } from "@clerk/nextjs/server";
 
 export const getServerSideProps: GetServerSideProps<{
   teamId: string;
 }> = async (ctx: GetServerSidePropsContext) => {
-  if (!ctx.params || !ctx.params.teamId || Array.isArray(ctx.params.teamId))
+  if (!ctx.params || !ctx.params.team_id || Array.isArray(ctx.params.team_id))
     return { notFound: true };
 
   try {
     const auth = getAuth(ctx.req);
-    const { authGuard } = getServices();
+    const { authGuard } = getServices(prisma, clerkClient.users);
 
     const { team } = await authGuard.authoriseByTeamMember(
       auth.userId ?? null,
-      ctx.params.teamId
+      ctx.params.team_id
     );
 
     return { props: { teamId: team.id } };
@@ -43,7 +45,6 @@ export const getServerSideProps: GetServerSideProps<{
 export default function CreateTeamPage({
   teamId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const query = api.teams.getTeamById.useQuery({ id: teamId });
   const teamMembersQuery = api.teams.getTeamMembersById.useQuery({
     id: teamId,
   });
@@ -58,12 +59,10 @@ export default function CreateTeamPage({
         <Card className="p-5">
           <CardHeader className="pb-0">
             <h1 className="scroll-m-20 text-center text-2xl font-extrabold tracking-tight lg:text-3xl">
-              Create Team
+              Team Members
             </h1>
           </CardHeader>
           <CardContent className="py-20">
-            <p>{query.data?.id}</p>
-            <p>{query.data?.name}</p>
             {teamMembersQuery.data &&
               teamMembersQuery.data.map((teamMember) => (
                 <p key={teamMember.user.id}>

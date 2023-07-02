@@ -126,7 +126,7 @@ const serviceInjector = t.middleware(({ ctx, next }) => {
   return next({
     ctx: {
       ...ctx,
-      services: getServices(),
+      services: getServices(ctx.prisma, clerkClient.users),
     },
   });
 });

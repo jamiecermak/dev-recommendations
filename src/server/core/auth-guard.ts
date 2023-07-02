@@ -16,7 +16,7 @@ class AuthGuard {
     teamId: string | null,
     opts: TeamMemberAssertionOptions = {}
   ) {
-    if (teamId === null) throw new Error("failed");
+    if (teamId === null) throw new AuthGuardError("Team ID is null");
 
     const team = await this.teamsService.getByIdOrThrow(teamId);
     const teamMemberPolicy = await this.teamMemberService.getPolicyByTeam(team);
@@ -35,11 +35,18 @@ class AuthGuard {
     teamId: string | null,
     opts: TeamMemberAssertionOptions = {}
   ) {
-    if (userId === null) throw new Error("failed1");
+    if (userId === null) throw new AuthGuardError("User ID is null");
 
     const [user] = await this.clerkUserService.authenticateById(userId);
 
     return this.authoriseByTeamMemberWithUser(user, teamId, opts);
+  }
+}
+
+class AuthGuardError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AuthGuardError";
   }
 }
 
