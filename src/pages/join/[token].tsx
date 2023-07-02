@@ -12,6 +12,7 @@ import type { Team } from "@prisma/client";
 import { CenteredCardLayout } from "~/components/layout/centered-card";
 import { InvalidInviteCodeCard } from "~/components/team-invites/invalid-invite-code-card";
 import { JoinTeamCard } from "~/components/team-invites/join-team-card";
+import { AppHeaderLayout } from "~/components/layout/app-header";
 
 export default function JoinTeamPage({
   team,
@@ -29,9 +30,9 @@ export default function JoinTeamPage({
           <title>Join Team | Dev Recommendations</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <CenteredCardLayout>
+        <AppHeaderLayout className="items-center justify-center">
           <InvalidInviteCodeCard />
-        </CenteredCardLayout>
+        </AppHeaderLayout>
       </>
     );
   }
@@ -42,14 +43,14 @@ export default function JoinTeamPage({
         <title>Join Team | Dev Recommendations</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <CenteredCardLayout>
+      <AppHeaderLayout>
         <JoinTeamCard
           teamName={team.name}
           invitedBy={team.invitedBy}
           token={token}
           onJoinedTeam={handleJoinedTeam}
         />
-      </CenteredCardLayout>
+      </AppHeaderLayout>
     </>
   );
 }

@@ -9,6 +9,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import Link from "next/link";
+import { AppHeaderLayout } from "~/components/layout/app-header";
 
 export default function CreateTeamPage() {
   const query = api.teams.getMyTeams.useQuery();
@@ -19,7 +20,7 @@ export default function CreateTeamPage() {
         <title>My Teams</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="dark flex min-h-screen items-center justify-center bg-slate-900 text-white">
+      <AppHeaderLayout>
         <Card className="p-5">
           <CardHeader className="pb-0">
             <h1 className="scroll-m-20 text-center text-2xl font-extrabold tracking-tight lg:text-3xl">
@@ -41,7 +42,7 @@ export default function CreateTeamPage() {
           </CardContent>
           <CardFooter className="flex flex-col justify-center gap-5"></CardFooter>
         </Card>
-      </main>
+      </AppHeaderLayout>
     </>
   );
 }

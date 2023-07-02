@@ -2,13 +2,18 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 
 export function InvalidInviteCodeCard() {
   return (
-    <Card className="p-5">
-      <CardHeader className="pb-0">
-        <h1 className="scroll-m-20 text-center text-2xl font-extrabold tracking-tight lg:text-3xl">
+    <Card className="max-w-lg p-5">
+      <CardHeader>
+        <h1 className="scroll-m-20 text-center text-3xl font-bold tracking-tight">
           Invalid Invite Code
         </h1>
       </CardHeader>
-      <CardContent className="py-20"></CardContent>
+      <CardContent>
+        <p className="text-center">
+          The invite link that you used may have expired, or is malformed.
+          Contact the inviter to get a new link.
+        </p>
+      </CardContent>
     </Card>
   );
 }
