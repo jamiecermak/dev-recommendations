@@ -170,3 +170,69 @@ it("should determine if a user is the team owner", () => {
     )
   ).toThrow();
 });
+
+describe("retrieving membership status", () => {
+  it("should throw if the user is not active", () => {
+    const teamMemberPolicy = new TeamMemberPolicy(teamFixture, []);
+
+    expect(() => teamMemberPolicy.getByUserId("i-do-not-exist")).toThrow(
+      "Insufficent team privileges. Not a team member"
+    );
+  });
+
+  it("should retrieve admin and owner status for active users", () => {
+    const teamMemberPolicy = new TeamMemberPolicy(
+      {
+        ...teamFixture,
+        ownedByUserId: "user-id-1",
+      },
+      [
+        {
+          ...teamMemberFixture,
+          userId: "user-id-1",
+          user: {
+            ...teamMemberFixture.user,
+            id: "user-id-1",
+          },
+          isActive: true,
+          isAdmin: true,
+        },
+        {
+          ...teamMemberFixture,
+          userId: "user-id-2",
+          user: {
+            ...teamMemberFixture.user,
+            id: "user-id-2",
+          },
+          isActive: true,
+          isAdmin: true,
+        },
+        {
+          ...teamMemberFixture,
+          userId: "user-id-3",
+          user: {
+            ...teamMemberFixture.user,
+            id: "user-id-3",
+          },
+          isActive: true,
+          isAdmin: false,
+        },
+      ]
+    );
+
+    expect(teamMemberPolicy.getByUserId("user-id-1")).toEqual({
+      isAdmin: true,
+      isOwner: true,
+    });
+
+    expect(teamMemberPolicy.getByUserId("user-id-2")).toEqual({
+      isAdmin: true,
+      isOwner: false,
+    });
+
+    expect(teamMemberPolicy.getByUserId("user-id-3")).toEqual({
+      isAdmin: false,
+      isOwner: false,
+    });
+  });
+});

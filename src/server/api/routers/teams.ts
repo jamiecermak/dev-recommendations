@@ -75,4 +75,19 @@ export const teamsRouter = createTRPCRouter({
 
       return inviteCode.team;
     }),
+  getTeamMembership: protectedProcedure
+    .input(
+      z.object({
+        teamId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { team, teamMemberPolicy } =
+        await ctx.services.authGuard.authoriseByTeamMemberWithUser(
+          ctx.user,
+          input.teamId
+        );
+
+      return { team, membership: teamMemberPolicy.getByUserId(ctx.user.id) };
+    }),
 });

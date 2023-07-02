@@ -32,6 +32,16 @@ class TeamMemberPolicy {
     return this.teamMembers.some((teamMember) => teamMember.userId === userId);
   }
 
+  getByUserId(userId: string) {
+    if (!this.isActive(userId))
+      throw new TeamPrivilegesError("Not a team member");
+
+    return {
+      isAdmin: this.isAdmin(userId),
+      isOwner: this.isOwner(userId),
+    };
+  }
+
   getAll() {
     return this.teamMembers.map((teamMember) => ({
       isActive: teamMember.isActive,

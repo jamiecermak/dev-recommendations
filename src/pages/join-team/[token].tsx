@@ -1,18 +1,5 @@
 import Head from "next/head";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "~/components/ui/card";
-import { Button } from "~/components/ui/button";
-import {
-  SignInButton,
-  SignUpButton,
-  clerkClient,
-  useAuth,
-} from "@clerk/nextjs";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { clerkClient } from "@clerk/nextjs";
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -20,41 +7,49 @@ import type {
 } from "next";
 import { getServices } from "~/server/service-builder";
 import { prisma } from "~/server/db";
-import { api } from "~/utils/api";
 import { useRouter } from "next/router";
+import type { Team } from "@prisma/client";
+import { CenteredCardLayout } from "~/components/layout/centered-card";
+import { InvalidInviteCodeCard } from "~/components/team-invites/invalid-invite-code-card";
+import { JoinTeamCard } from "~/components/team-invites/join-team-card";
 
-function SignInCardFooter({ children }: { children: React.ReactNode }) {
-  const auth = useAuth();
+export default function JoinTeamPage({
+  team,
+  token,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+  const handleJoinedTeam = (team: Team) => {
+    void router.push(`/team/${team.id}`);
+  };
 
-  if (!auth.isLoaded) {
+  if (team === null) {
     return (
-      <Button size="lg" className="w-96" disabled>
-        <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-        Please wait
-      </Button>
+      <>
+        <Head>
+          <title>Join Team | Dev Recommendations</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <CenteredCardLayout>
+          <InvalidInviteCodeCard />
+        </CenteredCardLayout>
+      </>
     );
-  }
-
-  if (auth.isSignedIn) {
-    return children;
   }
 
   return (
     <>
-      <SignUpButton>
-        <Button size="lg" className="w-96">
-          Sign up
-        </Button>
-      </SignUpButton>
-
-      <p className="text-sm text-slate-400">
-        Already have an account?{" "}
-        <SignInButton>
-          <a className="cursor-pointer font-medium text-slate-100 hover:underline">
-            Sign in instead
-          </a>
-        </SignInButton>
-      </p>
+      <Head>
+        <title>Join Team | Dev Recommendations</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <CenteredCardLayout>
+        <JoinTeamCard
+          teamName={team.name}
+          invitedBy={team.invitedBy}
+          token={token}
+          onJoinedTeam={handleJoinedTeam}
+        />
+      </CenteredCardLayout>
     </>
   );
 }
@@ -95,52 +90,3 @@ export const getServerSideProps: GetServerSideProps<{
     };
   }
 };
-
-export default function JoinTeamPage({
-  team,
-  token,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
-  const mutation = api.teams.joinTeam.useMutation({
-    onSuccess: (team) => router.push(`/team/${team.id}`),
-  });
-
-  return (
-    <>
-      <Head>
-        <title>Join Team | Dev Recommendations</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="dark flex min-h-screen items-center justify-center bg-slate-900 text-white">
-        <Card className="p-5">
-          <CardHeader className="pb-0">
-            <h1 className="scroll-m-20 text-center text-2xl font-extrabold tracking-tight lg:text-3xl">
-              Join Team
-            </h1>
-          </CardHeader>
-          <CardContent className="py-20">
-            {team === null ? (
-              <p>Invite code not valid</p>
-            ) : (
-              <>
-                <p>{team.name}</p>
-                <p>Invited by {team.invitedBy}</p>
-              </>
-            )}
-          </CardContent>
-          <CardFooter className="flex flex-col justify-center gap-5">
-            <SignInCardFooter>
-              <Button
-                size="lg"
-                className="w-96"
-                onClick={() => mutation.mutate({ token })}
-              >
-                Join now
-              </Button>
-            </SignInCardFooter>
-          </CardFooter>
-        </Card>
-      </main>
-    </>
-  );
-}

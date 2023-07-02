@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import Head from "next/head";
 import {
   Card,
@@ -7,48 +6,15 @@ import {
   CardHeader,
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { api } from "~/utils/api";
-import type {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from "next";
+import type { GetServerSideProps } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { getServices } from "~/server/service-builder";
 import { prisma } from "~/server/db";
 import { clerkClient } from "@clerk/nextjs/server";
+import { useCurrentTeam } from "~/hooks/use-current-team";
 
-export const getServerSideProps: GetServerSideProps<{
-  teamId: string;
-}> = async (ctx: GetServerSidePropsContext) => {
-  if (!ctx.params || !ctx.params.team_id || Array.isArray(ctx.params.team_id))
-    return { notFound: true };
-
-  try {
-    const auth = getAuth(ctx.req);
-    const { authGuard } = getServices(prisma, clerkClient.users);
-
-    const { team } = await authGuard.authoriseByTeamMember(
-      auth.userId ?? null,
-      ctx.params.team_id
-    );
-
-    return { props: { teamId: team.id } };
-  } catch (ex) {
-    console.error(ex);
-    return {
-      notFound: true,
-    };
-  }
-};
-
-export default function CreateTeamPage({
-  teamId,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const query = api.teams.getTeamById.useQuery({ id: teamId });
-  const teamMembersQuery = api.teams.getTeamMembersById.useQuery({
-    id: teamId,
-  });
+export default function CreateTeamPage() {
+  const { team } = useCurrentTeam();
 
   return (
     <>
@@ -64,17 +30,8 @@ export default function CreateTeamPage({
             </h1>
           </CardHeader>
           <CardContent className="py-20">
-            <p>{query.data?.id}</p>
-            <p>{query.data?.name}</p>
-            {teamMembersQuery.data &&
-              teamMembersQuery.data.map((teamMember) => (
-                <p key={teamMember.user.id}>
-                  <span>{teamMember.user.id}</span>
-                  {teamMember.isActive && <span>is active</span>}
-                  {teamMember.isAdmin && <span>is admin</span>}
-                  {teamMember.isOwner && <span>is owner</span>}
-                </p>
-              ))}
+            <p>{team?.id}</p>
+            <p>{team?.name}</p>
           </CardContent>
           <CardFooter className="flex flex-col justify-center gap-5">
             <Button size="lg" className="w-96">
@@ -86,3 +43,24 @@ export default function CreateTeamPage({
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  if (!ctx.params || !ctx.params.team_id || Array.isArray(ctx.params.team_id))
+    return { notFound: true };
+
+  try {
+    const auth = getAuth(ctx.req);
+    const { authGuard } = getServices(prisma, clerkClient.users);
+
+    await authGuard.authoriseByTeamMember(
+      auth.userId ?? null,
+      ctx.params.team_id
+    );
+
+    return { props: {} };
+  } catch (ex) {
+    return {
+      notFound: true,
+    };
+  }
+};
