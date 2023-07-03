@@ -5,7 +5,8 @@ import { useCopyToClipboard } from "usehooks-ts";
 
 export function CreateInviteLinkButton({ teamId }: { teamId: string }) {
   const [, copyToClipboard] = useCopyToClipboard();
-  const createInviteCodeMutation = api.teams.createInviteCode.useMutation();
+  const createInviteCodeMutation =
+    api.teamInvites.createInviteCode.useMutation();
 
   const handleClick = () => {
     createInviteCodeMutation.mutate(

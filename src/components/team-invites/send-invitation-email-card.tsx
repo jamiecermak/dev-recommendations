@@ -28,7 +28,8 @@ export function SendInvitationEmailCard({
   teamName: string;
   teamId: string;
 }) {
-  const inviteTeamMemberMutation = api.teams.inviteTeamMember.useMutation();
+  const inviteTeamMemberMutation =
+    api.teamInvites.inviteTeamMember.useMutation();
 
   const form = useForm<InviteMemberFormValues>({
     resolver: zodResolver(formSchema),

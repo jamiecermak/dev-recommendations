@@ -20,7 +20,7 @@ import { NextJSPageAuth } from "~/server/page-auth";
 export default function CreateTeamPage({
   team,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const teamMembersQuery = api.teams.getTeamMembersById.useQuery({
+  const teamMembersQuery = api.teamMembers.getTeamMembersById.useQuery({
     id: team.id,
   });
 

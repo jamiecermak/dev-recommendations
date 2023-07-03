@@ -9,14 +9,15 @@ export function useCurrentTeam({
   suspense = false,
 }: UseCurrentTeamOptions = {}) {
   const teamId = useCurrentTeamId();
-  const { isLoading, data, isError } = api.teams.getTeamMembership.useQuery(
-    {
-      teamId,
-    },
-    {
-      suspense,
-    }
-  );
+  const { isLoading, data, isError } =
+    api.teamMembers.getTeamMembership.useQuery(
+      {
+        teamId,
+      },
+      {
+        suspense,
+      }
+    );
 
   if (isLoading) {
     return {

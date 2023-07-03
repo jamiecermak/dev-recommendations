@@ -57,7 +57,7 @@ export function JoinTeamCard({
   invitedBy: string;
   onJoinedTeam: (team: Team) => void;
 }) {
-  const joinTeamMutation = api.teams.joinTeam.useMutation({
+  const joinTeamMutation = api.teamInvites.joinTeam.useMutation({
     onSuccess: onJoinedTeam,
   });
 
