@@ -17,6 +17,12 @@ let inviteCodeService: InviteCodeService;
 let mockPrisma: MockedPrismaClient;
 let mockTeamMemberService: MockedService<TeamMemberService>;
 
+jest.mock("nanoid", () => {
+  return {
+    nanoid: () => "my-nano-id",
+  };
+});
+
 beforeEach(() => {
   jest.resetAllMocks();
   jest.useFakeTimers().setSystemTime(new Date("2020-01-01"));
@@ -24,10 +30,6 @@ beforeEach(() => {
   mockPrisma = createMockedPrisma();
   mockTeamMemberService = createMockedService<TeamMemberService>();
   inviteCodeService = new InviteCodeService(mockPrisma, mockTeamMemberService);
-});
-
-it("should generate a token", () => {
-  expect(InviteCodeService.generateToken(10)).toHaveLength(10);
 });
 
 describe("creating an invite code", () => {
@@ -97,7 +99,7 @@ describe("creating an invite code", () => {
           expiresAt: new Date("2020-01-11"),
           invitedByUserId: "admin-team-member",
           teamId: teamFixture.id,
-          token: expect.any(String) as string,
+          token: "my-nano-id",
         },
       })
     );

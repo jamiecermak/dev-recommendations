@@ -1,6 +1,7 @@
 import type { PrismaClient, Team, User } from "@prisma/client";
 import type { TeamMemberService } from "./team-member-service";
 import { add } from "date-fns";
+import { nanoid } from "nanoid";
 
 class InviteCodeService {
   static INVITE_CODE_TOKEN_LENGTH = 10;
@@ -27,7 +28,7 @@ class InviteCodeService {
         invitedByUserId: createdByUser.id,
         emailAddress: inviteeEmailAddress,
         expiresAt: add(new Date(), { days: expirationDays }),
-        token: InviteCodeService.generateToken(),
+        token: nanoid(InviteCodeService.INVITE_CODE_TOKEN_LENGTH),
       },
       include: {
         invitedByUser: true,
@@ -80,22 +81,6 @@ class InviteCodeService {
         team: true,
       },
     });
-  }
-
-  static generateToken(
-    length: number = InviteCodeService.INVITE_CODE_TOKEN_LENGTH
-  ) {
-    let result = "";
-    const characters = "abcdefghijklmnopqrstuvxyz0123456789";
-    const charactersLength = characters.length;
-    let counter = 0;
-
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-
-    return result;
   }
 }
 
