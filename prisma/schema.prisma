@@ -28,6 +28,7 @@ model User {
 model Team {
     id              String       @id @default(cuid())
     name            String
+    description     String       @default("")
     createdByUserId String       @map("created_by_user_id")
     ownedByUserId   String       @map("owned_by_user_id")
     createdAt       DateTime     @default(now()) @map("created_at")
@@ -61,7 +62,7 @@ model InviteCode {
     id              String    @id @default(cuid())
     token           String
     invitedByUserId String    @map("invited_by_user_id")
-    emailAddress    String    @map("email_address")
+    emailAddress    String?   @map("email_address")
     teamId          String    @map("team_id")
     isUsed          Boolean   @default(false) @map("is_used")
     usedAt          DateTime? @map("used_at")

@@ -9,7 +9,6 @@ import { getServices } from "~/server/service-builder";
 import { prisma } from "~/server/db";
 import { useRouter } from "next/router";
 import type { Team } from "@prisma/client";
-import { CenteredCardLayout } from "~/components/layout/centered-card";
 import { InvalidInviteCodeCard } from "~/components/team-invites/invalid-invite-code-card";
 import { JoinTeamCard } from "~/components/team-invites/join-team-card";
 import { AppHeaderLayout } from "~/components/layout/app-header";
@@ -27,7 +26,7 @@ export default function JoinTeamPage({
     return (
       <>
         <Head>
-          <title>Join Team | Dev Recommendations</title>
+          <title>Join Team | Rcmd 👍</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <AppHeaderLayout className="items-center justify-center">
@@ -40,7 +39,7 @@ export default function JoinTeamPage({
   return (
     <>
       <Head>
-        <title>Join Team | Dev Recommendations</title>
+        <title>Join Team | Rcmd 👍</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppHeaderLayout>

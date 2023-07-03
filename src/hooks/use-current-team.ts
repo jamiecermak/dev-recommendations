@@ -1,11 +1,22 @@
 import { useCurrentTeamId } from "./use-current-team-id";
 import { api } from "~/utils/api";
 
-export function useCurrentTeam() {
+interface UseCurrentTeamOptions {
+  suspense?: boolean;
+}
+
+export function useCurrentTeam({
+  suspense = false,
+}: UseCurrentTeamOptions = {}) {
   const teamId = useCurrentTeamId();
-  const { isLoading, data, isError } = api.teams.getTeamMembership.useQuery({
-    teamId,
-  });
+  const { isLoading, data, isError } = api.teams.getTeamMembership.useQuery(
+    {
+      teamId,
+    },
+    {
+      suspense,
+    }
+  );
 
   if (isLoading) {
     return {

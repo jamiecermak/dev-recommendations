@@ -2,6 +2,7 @@ import { cn } from "~/utils/shad-cn";
 import { Button } from "../ui/button";
 import { GearIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { Settings } from "lucide-react";
 
 export interface AppHeaderLayoutProps
   extends React.HTMLAttributes<HTMLElement> {
@@ -49,7 +50,7 @@ export function AppHeaderLayout({
           </div>
           <div className="flex gap-2">
             <Button variant="ghost" className="h-10 p-3 text-white">
-              <GearIcon className="h-5 w-5" />
+              <Settings className="h-5 w-5" />
             </Button>
             <Button variant="outline" className="h-10 text-white">
               Sign out
@@ -61,7 +62,7 @@ export function AppHeaderLayout({
         <div className="flex h-32 w-full justify-center bg-gray-950">
           <div
             className={cn(
-              "flex w-full max-w-4xl items-end justify-between px-5 py-7 xl:max-w-5xl xl:px-0"
+              "flex w-full max-w-4xl items-end justify-between px-5 py-6 xl:max-w-5xl xl:px-0"
             )}
           >
             <h1 className="scroll-m-20  text-center text-3xl font-bold tracking-tight">

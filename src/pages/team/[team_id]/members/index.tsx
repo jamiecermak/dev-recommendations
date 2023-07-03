@@ -9,44 +9,19 @@ import {
 import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import type {
-  GetServerSideProps,
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-import { getAuth } from "@clerk/nextjs/server";
 import { getServices } from "~/server/service-builder";
 import { prisma } from "~/server/db";
 import { clerkClient } from "@clerk/nextjs/server";
-
-export const getServerSideProps: GetServerSideProps<{
-  teamId: string;
-}> = async (ctx: GetServerSidePropsContext) => {
-  if (!ctx.params || !ctx.params.team_id || Array.isArray(ctx.params.team_id))
-    return { notFound: true };
-
-  try {
-    const auth = getAuth(ctx.req);
-    const { authGuard } = getServices(prisma, clerkClient.users);
-
-    const { team } = await authGuard.authoriseByTeamMember(
-      auth.userId ?? null,
-      ctx.params.team_id
-    );
-
-    return { props: { teamId: team.id } };
-  } catch (ex) {
-    console.error(ex);
-    return {
-      notFound: true,
-    };
-  }
-};
+import { NextJSPageAuth } from "~/server/page-auth";
 
 export default function CreateTeamPage({
-  teamId,
+  team,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const teamMembersQuery = api.teams.getTeamMembersById.useQuery({
-    id: teamId,
+    id: team.id,
   });
 
   return (
@@ -83,3 +58,10 @@ export default function CreateTeamPage({
     </>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { authGuard } = getServices(prisma, clerkClient.users);
+  const pageAuth = new NextJSPageAuth(authGuard);
+
+  return pageAuth.authoriseTeamViaServerContext(ctx, { isAdmin: true });
+};

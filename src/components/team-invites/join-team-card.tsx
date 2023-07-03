@@ -80,10 +80,8 @@ export function JoinTeamCard({
         </h1>
       </CardHeader>
       <CardContent className="py-20">
-        <>
-          <p>{teamName}</p>
-          <p>Invited by {invitedBy}</p>
-        </>
+        <p>{teamName}</p>
+        <p>Invited by {invitedBy}</p>
       </CardContent>
       <CardFooter className="flex flex-col justify-center gap-5">
         <SignInCardFooter>

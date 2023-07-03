@@ -61,6 +61,28 @@ export const teamsRouter = createTRPCRouter({
 
       await ctx.services.inviteCode.create(team, ctx.user, input.emailAddress);
     }),
+  createInviteCode: protectedProcedure
+    .input(
+      z.object({
+        teamId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { team } =
+        await ctx.services.authGuard.authoriseByTeamMemberWithUser(
+          ctx.user,
+          input.teamId,
+          { isAdmin: true }
+        );
+
+      const newInviteCode = await ctx.services.inviteCode.create(
+        team,
+        ctx.user,
+        null
+      );
+
+      return { token: newInviteCode.token };
+    }),
   joinTeam: protectedProcedure
     .input(
       z.object({

@@ -14,7 +14,7 @@ class InviteCodeService {
   async create(
     team: Team,
     createdByUser: User,
-    inviteeEmailAddress: string,
+    inviteeEmailAddress: string | null,
     expirationDays: number = InviteCodeService.DEFAULT_EXPIRATION_DAYS
   ) {
     const teamMemberPolicy = await this.teamMemberService.getPolicyByTeam(team);
