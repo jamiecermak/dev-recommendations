@@ -1,6 +1,5 @@
 import { cn } from "~/utils/shad-cn";
 import { Button } from "../ui/button";
-import { GearIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { Settings } from "lucide-react";
 

@@ -15,6 +15,7 @@ export const userFixture: PrismaUser = {
 export const teamFixture: Team = {
   id: "team-id",
   name: "My Awsesome Team",
+  description: "My Team Description",
   ownedByUserId: "owned-by-user-id",
   createdByUserId: "created-by-user-id",
   createdAt: new Date(),
