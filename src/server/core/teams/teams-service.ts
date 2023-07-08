@@ -3,10 +3,11 @@ import type { User, PrismaClient } from "@prisma/client";
 class TeamsService {
   constructor(private prisma: PrismaClient) {}
 
-  async createTeam(name: string, createdByUser: User) {
+  async createTeam(name: string, description: string, createdByUser: User) {
     const newTeam = await this.prisma.team.create({
       data: {
         name,
+        description,
         ownedByUserId: createdByUser.id,
         createdByUserId: createdByUser.id,
         teamMembers: {

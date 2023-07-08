@@ -22,13 +22,13 @@ const formSchema = z.object({
       "Team name cannot be less than 5 characters. Try providing a more descriptive team name."
     )
     .max(
-      50,
-      "Team name cannot be more than 50 characters. Try shortening your team name"
+      25,
+      "Team name cannot be more than 25 characters. Try shortening your team name"
     ),
   description: z
     .string()
     .min(5, "Team description cannot be less than 5 characters.")
-    .max(100, "Team description cannot be more than 100 characters."),
+    .max(50, "Team description cannot be more than 50 characters."),
 });
 
 type CreateTeamFormValues = z.infer<typeof formSchema>;
@@ -95,7 +95,9 @@ export function CreateTeamForm({
         <Button
           size="lg"
           onClick={form.handleSubmit(onSubmit)}
-          isLoading={createTeamMutation.isLoading}
+          isLoading={
+            createTeamMutation.isLoading || createTeamMutation.isSuccess
+          }
         >
           Create team
         </Button>

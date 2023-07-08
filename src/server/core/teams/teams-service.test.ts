@@ -21,6 +21,7 @@ describe("creating a team", () => {
 
     const newTeam = await teamsService.createTeam(
       "My Awesome Team",
+      "My team description",
       userFixture
     );
 
@@ -28,6 +29,7 @@ describe("creating a team", () => {
     expect(mockPrisma.team.create).toHaveBeenCalledWith({
       data: {
         name: "My Awesome Team",
+        description: "My team description",
         createdByUserId: userFixture.id,
         ownedByUserId: userFixture.id,
         teamMembers: {

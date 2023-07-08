@@ -5,11 +5,22 @@ export const teamsRouter = createTRPCRouter({
   createTeam: protectedProcedure
     .input(
       z.object({
-        name: z.string().max(50, "Must be less than 50 characters"),
+        name: z
+          .string()
+          .min(5, "Must be at least 5 characters")
+          .max(25, "Must be less than 25 characters"),
+        description: z
+          .string()
+          .min(5, "Must be at least 5 characters")
+          .max(50, "Must be less than 50 characters"),
       })
     )
     .mutation(({ ctx, input }) => {
-      return ctx.services.teams.createTeam(input.name, ctx.user);
+      return ctx.services.teams.createTeam(
+        input.name,
+        input.description,
+        ctx.user
+      );
     }),
 
   getTeamById: protectedProcedure
