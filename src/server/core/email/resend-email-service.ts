@@ -36,7 +36,7 @@ class ResendEmailService implements EmailService {
   }
 
   getFromAddress() {
-    return `Rcmd Notifications <${this.fromAddress}>`;
+    return `${this.fromName} <${this.fromAddress}>`;
   }
 }
 

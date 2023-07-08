@@ -13,13 +13,13 @@ beforeEach(() => {
 
 it("should get a from address", () => {
   const emailService = new ResendEmailService(
-    "Rcmd Notifications",
+    "test-from-name",
     "from-address@example.com",
     mockResend
   );
 
   expect(emailService.getFromAddress()).toBe(
-    "Rcmd Notifications <from-address@example.com>"
+    "test-from-name <from-address@example.com>"
   );
 });
 
