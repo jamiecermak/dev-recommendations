@@ -1,5 +1,6 @@
 import { AuthGuard } from "./core/auth-guard";
 import { ClerkUserService } from "./core/clerk-user-service";
+import { ClerkWebhookService } from "./core/clerk-webhook-service";
 import { InviteCodeService } from "./core/invite-code-service";
 import { TeamMemberService } from "./core/team-member-service";
 import { TeamsService } from "./core/teams-service";
@@ -15,6 +16,7 @@ export function getServices(
   const teamMember = new TeamMemberService(prismaClient);
   const inviteCode = new InviteCodeService(prismaClient, teamMember);
   const authGuard = new AuthGuard(clerkUser, teams, teamMember);
+  const clerkWebhook = new ClerkWebhookService(clerkUser);
 
   return {
     clerkUser,
@@ -22,5 +24,6 @@ export function getServices(
     teamMember,
     inviteCode,
     authGuard,
+    clerkWebhook,
   };
 }
