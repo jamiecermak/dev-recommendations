@@ -14,7 +14,9 @@ export const env = createEnv({
     RESEND_API_KEY: z.string(),
     FROM_EMAIL_ADDRESS: z.string(),
     DEVELOPMENT_EMAIL: z.string().optional(),
-    VERCEL_URL: z.string(),
+    VERCEL_URL: z.string().optional(),
+    RCMD_BASE_URL: z.string().optional(),
+    RCMD_DEV_BASE_URL: z.string().optional(),
   },
 
   /**
@@ -41,6 +43,8 @@ export const env = createEnv({
     FROM_EMAIL_ADDRESS: process.env.FROM_EMAIL_ADDRESS,
     DEVELOPMENT_EMAIL: process.env.DEVELOPMENT_EMAIL,
     VERCEL_URL: process.env.VERCEL_URL,
+    RCMD_BASE_URL: process.env.RCMD_BASE_URL,
+    RCMD_DEV_BASE_URL: process.env.RCMD_DEV_BASE_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

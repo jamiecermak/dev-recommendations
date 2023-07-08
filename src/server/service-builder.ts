@@ -12,6 +12,15 @@ import type { ClerkUserAPI } from "~/utils/clerk";
 import { env } from "~/env.mjs";
 import { EmailTemplateService } from "./email-templates/template-service";
 
+function getBaseUrl() {
+  if (env.RCMD_DEV_BASE_URL !== undefined)
+    return `http://${env.RCMD_DEV_BASE_URL}`;
+  if (env.RCMD_BASE_URL !== undefined) return `https://${env.RCMD_BASE_URL}`;
+  if (env.VERCEL_URL !== undefined) return `https://${env.VERCEL_URL}`;
+
+  throw new Error("Failed to create RCMD Base URL");
+}
+
 export function getServices(
   prismaClient: PrismaClient,
   clerkUserAPI: ClerkUserAPI
@@ -29,7 +38,7 @@ export function getServices(
   const authGuard = new AuthGuard(clerkUser, teams, teamMember);
   const clerkWebhook = new ClerkWebhookService(clerkUser);
   const emailTemplateService = new EmailTemplateService(
-    `https://${env.VERCEL_URL}`,
+    getBaseUrl(),
     emailService
   );
 
