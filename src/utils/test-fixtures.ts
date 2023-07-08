@@ -1,7 +1,7 @@
 import type { User as ClerkUser } from "@clerk/nextjs/server";
 import type { Team, User as PrismaUser, InviteCode } from "@prisma/client";
 import { add } from "date-fns";
-import { TeamMemberPolicy } from "~/server/core/team-member-policy";
+import { TeamMemberPolicy } from "~/server/core/teams/team-member-policy";
 import type { TeamMember } from "~/server/core/types";
 
 export const userFixture: PrismaUser = {
