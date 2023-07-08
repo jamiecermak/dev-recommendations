@@ -86,6 +86,14 @@ class ClerkUserService {
   async authenticateById(userId: string | null) {
     if (userId === null) throw new UnauthorizedError();
 
+    const existingUser = await this.prisma.user.findFirst({
+      where: {
+        clerkId: userId,
+      },
+    });
+
+    if (existingUser !== null) return existingUser;
+
     const clerkUser = await this.clerkUserAPI.getUser(userId);
 
     if (
@@ -105,7 +113,7 @@ class ClerkUserService {
         clerkUser.emailAddresses[0].emailAddress
       );
 
-      return [user, clerkUser] as const;
+      return user;
     } catch (ex) {
       throw new UnauthorizedError();
     }

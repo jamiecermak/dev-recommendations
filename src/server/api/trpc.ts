@@ -112,13 +112,12 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
-  const [user, clerkUser] = await getUserById(ctx.auth.userId);
+  const user = await getUserById(ctx.auth.userId);
 
   return next({
     ctx: {
       // infers the `session` as non-nullable
       auth: { ...ctx.auth },
-      clerkUser: { ...clerkUser },
       user: { ...user },
     },
   });

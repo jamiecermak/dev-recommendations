@@ -32,6 +32,7 @@ describe("authenticating a user from a clerk user id", () => {
   });
 
   it("should throw if it fails to get a clerk user", async () => {
+    mockPrisma.user.findFirst.mockResolvedValue(null);
     mockClerkUserAPI.getUser.mockRejectedValue(new Error("Failed"));
 
     await expect(userService.authenticateById("failed-id")).rejects.toThrow(
@@ -82,6 +83,20 @@ describe("authenticating a user from a clerk user id", () => {
     expect(mockPrisma.user.create).not.toHaveBeenCalled();
   });
 
+  describe("when the user already exists", () => {
+    beforeEach(() => {
+      mockPrisma.user.findFirst.mockResolvedValue(dbUserFixture);
+    });
+
+    it("should not request the user from clerk", async () => {
+      const user = await userService.authenticateById("clerk-user-id");
+
+      expect(user).toMatchObject(dbUserFixture);
+
+      expect(mockClerkUserAPI.getUser).not.toHaveBeenCalled();
+    });
+  });
+
   describe("when clerk auth passes", () => {
     beforeEach(() => {
       mockClerkUserAPI.getUser.mockResolvedValue(clerkUserFixture);
@@ -90,12 +105,9 @@ describe("authenticating a user from a clerk user id", () => {
     it("should not create a user if it already exists", async () => {
       mockPrisma.user.findFirst.mockResolvedValue(dbUserFixture);
 
-      const [user, clerkUser] = await userService.authenticateById(
-        "clerk-user-id"
-      );
+      const user = await userService.authenticateById("clerk-user-id");
 
       expect(user).toMatchObject(dbUserFixture);
-      expect(clerkUser).toMatchObject(clerkUserFixture);
       expect(mockPrisma.user.create).not.toHaveBeenCalled();
     });
 
@@ -103,12 +115,9 @@ describe("authenticating a user from a clerk user id", () => {
       mockPrisma.user.findFirst.mockResolvedValue(null);
       mockPrisma.user.create.mockResolvedValue(dbUserFixture);
 
-      const [newUser, clerkUser] = await userService.authenticateById(
-        "new-clerk-user-id"
-      );
+      const newUser = await userService.authenticateById("new-clerk-user-id");
 
       expect(newUser).toMatchObject(dbUserFixture);
-      expect(clerkUser).toMatchObject(clerkUserFixture);
       expect(mockPrisma.user.create).toHaveBeenCalledWith({
         data: {
           clerkId: "new-clerk-user-id",

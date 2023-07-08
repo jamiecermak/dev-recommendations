@@ -37,7 +37,7 @@ class AuthGuard {
   ) {
     if (userId === null) throw new AuthGuardError("User ID is null");
 
-    const [user] = await this.clerkUserService.authenticateById(userId);
+    const user = await this.clerkUserService.authenticateById(userId);
 
     return this.authoriseByTeamMemberWithUser(user, teamId, opts);
   }
