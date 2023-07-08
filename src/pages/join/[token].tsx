@@ -12,10 +12,12 @@ import type { Team } from "@prisma/client";
 import { InvalidInviteCodeCard } from "~/components/team-invites/invalid-invite-code-card";
 import { JoinTeamCard } from "~/components/team-invites/join-team-card";
 import { AppHeaderLayout } from "~/components/layout/app-header";
+import { getAuth } from "@clerk/nextjs/server";
 
 export default function JoinTeamPage({
   team,
   token,
+  isSignedIn,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const handleJoinedTeam = (team: Team) => {
@@ -29,7 +31,10 @@ export default function JoinTeamPage({
           <title>Join Team | Rcmd 👍</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <AppHeaderLayout className="items-center justify-center">
+        <AppHeaderLayout
+          className="items-center justify-center"
+          hideAppHeader={!isSignedIn}
+        >
           <InvalidInviteCodeCard />
         </AppHeaderLayout>
       </>
@@ -42,7 +47,7 @@ export default function JoinTeamPage({
         <title>Join Team | Rcmd 👍</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppHeaderLayout>
+      <AppHeaderLayout hideAppHeader={!isSignedIn}>
         <JoinTeamCard
           teamName={team.name}
           invitedBy={team.invitedBy}
@@ -60,9 +65,13 @@ export const getServerSideProps: GetServerSideProps<{
     invitedBy: string;
   } | null;
   token: string;
+  isSignedIn: boolean;
 }> = async (ctx: GetServerSidePropsContext) => {
   if (!ctx.params || !ctx.params.token || Array.isArray(ctx.params.token))
     return { notFound: true };
+
+  const auth = getAuth(ctx.req);
+  const isSignedIn = auth.userId !== null && auth.userId !== undefined;
 
   try {
     const { inviteCode: inviteCodeService } = getServices(
@@ -79,6 +88,7 @@ export const getServerSideProps: GetServerSideProps<{
           invitedBy: inviteCode.invitedByUser.id,
         },
         token: ctx.params.token,
+        isSignedIn,
       },
     };
   } catch (ex) {
@@ -86,6 +96,7 @@ export const getServerSideProps: GetServerSideProps<{
       props: {
         team: null,
         token: ctx.params.token,
+        isSignedIn,
       },
     };
   }

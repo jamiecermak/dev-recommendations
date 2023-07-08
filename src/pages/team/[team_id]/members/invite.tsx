@@ -54,7 +54,7 @@ export default function MemberInvitePage({
   );
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
   const { authGuard } = getServices(prisma, clerkClient.users);
   const pageAuth = new NextJSPageAuth(authGuard);
 

@@ -2,11 +2,13 @@ import { cn } from "~/utils/shad-cn";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Settings } from "lucide-react";
+import { SignInButton, SignOutButton } from "@clerk/nextjs";
 
 export interface AppHeaderLayoutProps
   extends React.HTMLAttributes<HTMLElement> {
   aside?: React.ReactNode;
   header?: React.ReactNode;
+  hideAppHeader?: boolean;
 }
 
 export function AppHeaderLayout({
@@ -14,6 +16,7 @@ export function AppHeaderLayout({
   aside,
   header,
   children,
+  hideAppHeader = false,
   ...props
 }: AppHeaderLayoutProps) {
   return (
@@ -22,39 +25,54 @@ export function AppHeaderLayout({
         <div className="flex w-full max-w-4xl items-center justify-between px-5 xl:max-w-5xl xl:px-0">
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold">Rcmd 👍 </h1>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                className="h-10 px-3 font-semibold text-white"
-              >
-                New & Noteworthy
+            {!hideAppHeader && (
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  className="h-10 px-3 font-semibold text-white"
+                >
+                  New & Noteworthy
+                </Button>
+                <Link href="/teams">
+                  <Button
+                    variant="ghost"
+                    className="h-10 px-3 font-semibold text-white"
+                  >
+                    Teams
+                  </Button>
+                </Link>
+                <Link href="/team/create">
+                  <Button
+                    variant="ghost"
+                    className="h-10 px-3 font-semibold text-white"
+                  >
+                    Create
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
+          {!hideAppHeader && (
+            <div className="flex gap-2">
+              <Button variant="ghost" className="h-10 p-3 text-white">
+                <Settings className="h-5 w-5" />
               </Button>
-              <Link href="/teams">
-                <Button
-                  variant="ghost"
-                  className="h-10 px-3 font-semibold text-white"
-                >
-                  Teams
+              <SignOutButton>
+                <Button variant="outline" className="h-10 text-white">
+                  Sign out
                 </Button>
-              </Link>
-              <Link href="/team/create">
-                <Button
-                  variant="ghost"
-                  className="h-10 px-3 font-semibold text-white"
-                >
-                  Create
-                </Button>
-              </Link>
+              </SignOutButton>
             </div>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="ghost" className="h-10 p-3 text-white">
-              <Settings className="h-5 w-5" />
-            </Button>
-            <Button variant="outline" className="h-10 text-white">
-              Sign out
-            </Button>
-          </div>
+          )}
+          {hideAppHeader && (
+            <div className="flex gap-2">
+              <SignInButton>
+                <Button variant="outline" className="h-10 text-white">
+                  Sign in
+                </Button>
+              </SignInButton>
+            </div>
+          )}
         </div>
       </nav>
       {header && (
