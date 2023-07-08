@@ -11,6 +11,10 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]),
     CLERK_SECRET_KEY: z.string(),
     CLERK_WEBHOOK_SECRET: z.string(),
+    RESEND_API_KEY: z.string(),
+    FROM_EMAIL_ADDRESS: z.string(),
+    DEVELOPMENT_EMAIL: z.string().optional(),
+    VERCEL_URL: z.string(),
   },
 
   /**
@@ -33,6 +37,10 @@ export const env = createEnv({
     CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    FROM_EMAIL_ADDRESS: process.env.FROM_EMAIL_ADDRESS,
+    DEVELOPMENT_EMAIL: process.env.DEVELOPMENT_EMAIL,
+    VERCEL_URL: process.env.VERCEL_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

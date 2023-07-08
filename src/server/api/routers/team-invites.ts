@@ -17,7 +17,18 @@ export const teamInvitesRouter = createTRPCRouter({
           { isAdmin: true }
         );
 
-      await ctx.services.inviteCode.create(team, ctx.user, input.emailAddress);
+      const inviteCode = await ctx.services.inviteCode.create(
+        team,
+        ctx.user,
+        input.emailAddress
+      );
+
+      await ctx.services.emailTemplateService.sendJoinTeamInvitationEmail(
+        inviteCode.token,
+        input.emailAddress,
+        inviteCode.team,
+        inviteCode.invitedByUser
+      );
     }),
 
   createInviteCode: protectedProcedure
