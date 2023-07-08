@@ -1,5 +1,5 @@
 import type { DeletedObjectJSON, UserJSON } from "@clerk/clerk-sdk-node";
-import type { ClerkUserService } from "./clerk-user-service";
+import type { ClerkUserService } from "../users/clerk-user-service";
 
 class ClerkWebhookService {
   constructor(private clerkUserService: ClerkUserService) {}

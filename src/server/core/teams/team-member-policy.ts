@@ -1,5 +1,5 @@
 import type { Team, User } from "@prisma/client";
-import type { TeamMember } from "./types";
+import type { TeamMember } from "../types";
 
 export interface TeamMemberAssertionOptions {
   isAdmin?: boolean;

@@ -1,16 +1,16 @@
 import { Resend } from "resend";
 import { AuthGuard } from "./core/auth-guard";
-import { ClerkUserService } from "./core/clerk-user-service";
-import { ClerkWebhookService } from "./core/clerk-webhook-service";
+import { ClerkUserService } from "./core/users/clerk-user-service";
+import { ClerkWebhookService } from "./core/webhooks/clerk-webhook-service";
 import type { EmailService } from "./core/email/email-service";
 import { ResendEmailService } from "./core/email/resend-email-service";
-import { InviteCodeService } from "./core/invite-code-service";
-import { TeamMemberService } from "./core/team-member-service";
-import { TeamsService } from "./core/teams-service";
+import { InviteCodeService } from "./core/teams/invite-code-service";
+import { TeamMemberService } from "./core/teams/team-member-service";
+import { TeamsService } from "./core/teams/teams-service";
 import type { PrismaClient } from "@prisma/client";
 import type { ClerkUserAPI } from "~/utils/clerk";
 import { env } from "~/env.mjs";
-import { EmailTemplateService } from "./email-templates/template-service";
+import { EmailTemplateService } from "./core/email-templates/template-service";
 
 function getBaseUrl() {
   if (env.RCMD_DEV_BASE_URL !== undefined)

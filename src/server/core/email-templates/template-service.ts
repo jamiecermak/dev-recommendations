@@ -1,7 +1,7 @@
 import type { Team, User } from "@prisma/client";
-import type { EmailService } from "../core/email/email-service";
+import type { EmailService } from "../email/email-service";
 import { JoinTeamEmail } from "./join-team-invitation";
-import { InviteCodeService } from "../core/invite-code-service";
+import { InviteCodeService } from "../teams/invite-code-service";
 import React from "react";
 
 class EmailTemplateService {

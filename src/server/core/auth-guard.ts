@@ -1,8 +1,8 @@
 import type { User } from "@prisma/client";
-import type { ClerkUserService } from "./clerk-user-service";
-import type { TeamMemberAssertionOptions } from "./team-member-policy";
-import type { TeamMemberService } from "./team-member-service";
-import type { TeamsService } from "./teams-service";
+import type { ClerkUserService } from "./users/clerk-user-service";
+import type { TeamMemberAssertionOptions } from "./teams/team-member-policy";
+import type { TeamMemberService } from "./teams/team-member-service";
+import type { TeamsService } from "./teams/teams-service";
 
 class AuthGuard {
   constructor(
