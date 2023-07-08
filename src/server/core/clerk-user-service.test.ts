@@ -32,12 +32,54 @@ describe("authenticating a user from a clerk user id", () => {
   });
 
   it("should throw if it fails to get a clerk user", async () => {
-    mockClerkUserAPI.getUser.mockRejectedValue(new Error());
+    mockClerkUserAPI.getUser.mockRejectedValue(new Error("Failed"));
 
     await expect(userService.authenticateById("failed-id")).rejects.toThrow(
-      "Failed to authenticate"
+      "Failed"
     );
     expect(mockClerkUserAPI.getUser).toHaveBeenCalledWith("failed-id");
+  });
+
+  it("should throw if the clerk user has no first name", async () => {
+    mockPrisma.user.findFirst.mockResolvedValue(null);
+    mockClerkUserAPI.getUser.mockResolvedValue({
+      ...clerkUserFixture,
+      firstName: null,
+    });
+
+    await expect(userService.authenticateById("clerk-user-id")).rejects.toThrow(
+      "Invalid Clerk User"
+    );
+
+    expect(mockPrisma.user.create).not.toHaveBeenCalled();
+  });
+
+  it("should throw if the clerk user has no last name", async () => {
+    mockPrisma.user.findFirst.mockResolvedValue(null);
+    mockClerkUserAPI.getUser.mockResolvedValue({
+      ...clerkUserFixture,
+      lastName: null,
+    });
+
+    await expect(userService.authenticateById("clerk-user-id")).rejects.toThrow(
+      "Invalid Clerk User"
+    );
+
+    expect(mockPrisma.user.create).not.toHaveBeenCalled();
+  });
+
+  it("should throw if the clerk user has no email addresses", async () => {
+    mockPrisma.user.findFirst.mockResolvedValue(null);
+    mockClerkUserAPI.getUser.mockResolvedValue({
+      ...clerkUserFixture,
+      emailAddresses: [],
+    });
+
+    await expect(userService.authenticateById("clerk-user-id")).rejects.toThrow(
+      "Invalid Clerk User"
+    );
+
+    expect(mockPrisma.user.create).not.toHaveBeenCalled();
   });
 
   describe("when clerk auth passes", () => {
@@ -70,9 +112,44 @@ describe("authenticating a user from a clerk user id", () => {
       expect(mockPrisma.user.create).toHaveBeenCalledWith({
         data: {
           clerkId: "new-clerk-user-id",
+          firstName: clerkUserFixture.firstName,
+          lastName: clerkUserFixture.lastName,
+          emailAddress: "johnsmith@example.com",
           isActive: true,
         },
       });
+    });
+  });
+});
+
+describe("deactivating a user", () => {
+  it("should throw if the user does not exist", async () => {
+    mockPrisma.user.findFirst.mockResolvedValue(null);
+
+    await expect(userService.deactivateUser("clerk-user-id")).rejects.toThrow(
+      "User not found"
+    );
+    expect(mockPrisma.user.update).not.toHaveBeenCalled();
+  });
+
+  it("should set isActive to false", async () => {
+    mockPrisma.user.findFirst.mockResolvedValue(dbUserFixture);
+
+    await userService.deactivateUser("clerk-user-id");
+
+    expect(mockPrisma.user.update).toHaveBeenCalledWith({
+      data: {
+        isActive: false,
+      },
+      where: {
+        id: dbUserFixture.id,
+      },
+    });
+
+    expect(mockPrisma.user.findFirst).toHaveBeenCalledWith({
+      where: {
+        clerkId: "clerk-user-id",
+      },
     });
   });
 });

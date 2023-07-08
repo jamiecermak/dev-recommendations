@@ -7,6 +7,9 @@ import type { TeamMember } from "~/server/core/types";
 export const userFixture: PrismaUser = {
   id: "internal-user-id",
   clerkId: "clerk-user-id",
+  firstName: "John",
+  lastName: "Smith",
+  emailAddress: "johnsmith@example.com",
   isActive: true,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -43,7 +46,12 @@ export const clerkUserFixture: ClerkUser = {
   username: "john.smith",
   firstName: "John",
   lastName: "Smith",
-  emailAddresses: [],
+  emailAddresses: [
+    {
+      id: "test",
+      emailAddress: "johnsmith@example.com",
+    },
+  ],
   phoneNumbers: [],
   web3Wallets: [],
   externalAccounts: [],

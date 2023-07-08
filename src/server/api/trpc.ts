@@ -95,10 +95,12 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
  */
 export const createTRPCRouter = t.router;
 
-function getUserById(userId: string | null) {
+async function getUserById(userId: string | null) {
   try {
     const clerkUserService = new ClerkUserService(prisma, clerkClient.users);
-    return clerkUserService.authenticateById(userId);
+    const user = await clerkUserService.authenticateById(userId);
+
+    return user;
   } catch {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
