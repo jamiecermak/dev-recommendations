@@ -13,11 +13,14 @@ beforeEach(() => {
 
 it("should get a from address", () => {
   const emailService = new ResendEmailService(
+    "Rcmd Notifications",
     "from-address@example.com",
     mockResend
   );
 
-  expect(emailService.getFromAddress()).toBe("from-address@example.com");
+  expect(emailService.getFromAddress()).toBe(
+    "Rcmd Notifications <from-address@example.com>"
+  );
 });
 
 it("should send an email", async () => {
@@ -26,6 +29,7 @@ it("should send an email", async () => {
   });
 
   const emailService = new ResendEmailService(
+    "Rcmd Notifications",
     "from-address@example.com",
     mockResend
   );
@@ -40,7 +44,7 @@ it("should send an email", async () => {
     })
   ).resolves.toBe("email-id");
   expect(mockResend.sendEmail).toHaveBeenCalledWith({
-    from: "from-address@example.com",
+    from: "Rcmd Notifications <from-address@example.com>",
     to: "to-address@example.com",
     subject: "Test Email",
     react: template,
@@ -53,6 +57,7 @@ it("should override the to address if an override is set", async () => {
   });
 
   const emailService = new ResendEmailService(
+    "Rcmd Notifications",
     "from-address@example.com",
     mockResend,
     "override-address@example.com"
@@ -66,7 +71,7 @@ it("should override the to address if an override is set", async () => {
 
   expect(mockResend.sendEmail).toHaveBeenCalledWith(
     expect.objectContaining({
-      from: "from-address@example.com",
+      from: "Rcmd Notifications <from-address@example.com>",
       to: "override-address@example.com",
       subject: "Test Email",
     })

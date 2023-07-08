@@ -7,6 +7,7 @@ import {
 
 class ResendEmailService implements EmailService {
   constructor(
+    private readonly fromName: string,
     private readonly fromAddress: string,
     private readonly resend: Resend,
     private readonly overrideToEmailAddress?: string
@@ -22,7 +23,7 @@ class ResendEmailService implements EmailService {
   async sendEmail({ to, template, subject }: SendEmailOptions) {
     try {
       const { id } = await this.resend.sendEmail({
-        from: this.fromAddress,
+        from: this.getFromAddress(),
         to: this.getToAddress(to),
         subject,
         react: template,
@@ -35,7 +36,7 @@ class ResendEmailService implements EmailService {
   }
 
   getFromAddress() {
-    return this.fromAddress;
+    return `Rcmd Notifications <${this.fromAddress}>`;
   }
 }
 

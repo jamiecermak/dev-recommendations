@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { GetServerSidePropsContext } from "next";
 import type { AuthGuard } from "./core/auth-guard";
-import type { TeamMemberAssertionOptions } from "./core/team-member-policy";
+import type { TeamMemberAssertionOptions } from "./core/teams/team-member-policy";
 import { getAuth } from "@clerk/nextjs/server";
 
 export class NextJSPageAuth {

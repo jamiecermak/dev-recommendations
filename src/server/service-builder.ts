@@ -26,9 +26,10 @@ export function getServices(
   clerkUserAPI: ClerkUserAPI
 ) {
   const emailService: EmailService = new ResendEmailService(
+    env.FROM_EMAIL_NAME,
     env.FROM_EMAIL_ADDRESS,
     new Resend(env.RESEND_API_KEY),
-    env.DEVELOPMENT_EMAIL
+    env.DEVELOPMENT_EMAIL_OVERRIDE
   );
 
   const clerkUser = new ClerkUserService(prismaClient, clerkUserAPI);

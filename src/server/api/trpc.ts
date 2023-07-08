@@ -13,7 +13,7 @@ import { type AuthObject, getAuth, clerkClient } from "@clerk/nextjs/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
-import { ClerkUserService } from "../core/clerk-user-service";
+import { ClerkUserService } from "../core/users/clerk-user-service";
 import { getServices } from "../service-builder";
 
 /**
