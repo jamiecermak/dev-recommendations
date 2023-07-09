@@ -4,7 +4,7 @@ export function InvalidInviteCodeCard() {
   return (
     <Card className="max-w-lg p-5">
       <CardHeader>
-        <h1 className="scroll-m-20 text-center text-3xl font-bold tracking-tight">
+        <h1 className="text-center text-3xl font-bold tracking-tight">
           Invalid Invite Code
         </h1>
       </CardHeader>

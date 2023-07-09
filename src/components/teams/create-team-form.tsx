@@ -63,7 +63,7 @@ export function CreateTeamForm({
             <FormItem>
               <FormLabel>Team Name</FormLabel>
               <FormControl>
-                <Input className="py-6 text-lg" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
               <FormDescription>
@@ -80,7 +80,7 @@ export function CreateTeamForm({
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input className="py-6 text-lg" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
               <FormDescription>

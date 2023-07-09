@@ -54,7 +54,7 @@ export function UpdateTeamForm({
         <FormItem>
           <FormLabel>Team Name</FormLabel>
           <FormControl>
-            <Input className="py-5 text-sm" disabled value={name} />
+            <Input disabled value={name} />
           </FormControl>
           <FormMessage />
           <FormDescription>
@@ -68,7 +68,7 @@ export function UpdateTeamForm({
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input className="py-6 text-lg" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
               <FormDescription>

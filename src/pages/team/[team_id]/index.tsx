@@ -11,10 +11,16 @@ import { NextJSPageAuth } from "~/server/page-auth";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { Settings } from "lucide-react";
+import { api } from "~/utils/api";
+import { Label } from "~/components/ui/label";
 
 export default function TeamDashboardPage({
   team,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const latestPostsQuery = api.posts.getLatestByTeam.useQuery({
+    teamId: team.id,
+  });
+
   return (
     <>
       <Head>
@@ -39,6 +45,24 @@ export default function TeamDashboardPage({
         <h2 className="scroll-m-20 text-2xl font-semibold lg:text-2xl">
           Latest Posts
         </h2>
+        {latestPostsQuery.data &&
+          latestPostsQuery.data.map((post) => (
+            <div key={post.id}>
+              <p>{post.title}</p>
+              <p>{post.description}</p>
+              <p>{post.href}</p>
+              <p>
+                {post.createdByUserFirstName} {post.createdByUserLastName}
+              </p>
+              <p>{post.createdAt.toISOString()}</p>
+              <p>{post.postType.name}</p>
+              <p>
+                {post.tags.map((tag) => (
+                  <Label key={tag.id}>{tag.name}</Label>
+                ))}
+              </p>
+            </div>
+          ))}
         <h2 className="scroll-m-20 text-2xl font-semibold lg:text-2xl">
           Popular this week
         </h2>

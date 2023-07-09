@@ -56,7 +56,7 @@ export function SendInvitationEmailCard({
     <GradientCard className="flex flex-col gap-6">
       <Form {...form}>
         <div className="flex flex-col gap-2">
-          <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
+          <h2 className="text-lg font-semibold tracking-tight">
             Send an invitation email
           </h2>
           <p className="text-muted-foreground">
@@ -71,7 +71,7 @@ export function SendInvitationEmailCard({
             <FormItem>
               <FormLabel>Email Address</FormLabel>
               <FormControl>
-                <Input className="py-6 text-lg" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

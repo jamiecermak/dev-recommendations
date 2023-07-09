@@ -54,6 +54,9 @@ module.exports = {
       spacing: {
         "18": "4.5rem",
       },
+      minHeight: {
+        '12': '3rem'
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

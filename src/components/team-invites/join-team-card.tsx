@@ -75,7 +75,7 @@ export function JoinTeamCard({
   return (
     <Card className="p-5">
       <CardHeader className="pb-0">
-        <h1 className="scroll-m-20 text-center text-2xl font-extrabold tracking-tight lg:text-3xl">
+        <h1 className="text-center text-2xl font-extrabold tracking-tight lg:text-3xl">
           Join Team
         </h1>
       </CardHeader>
