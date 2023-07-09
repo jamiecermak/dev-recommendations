@@ -1,15 +1,8 @@
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { SignInButton, SignUpButton, useAuth } from "@clerk/nextjs";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { api } from "~/utils/api";
 import type { Team } from "@prisma/client";
-
 function SignInCardFooter({ children }: { children: React.ReactNode }) {
   const auth = useAuth();
 
@@ -27,14 +20,14 @@ function SignInCardFooter({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <div className="flex flex-col items-center gap-3">
       <SignUpButton>
-        <Button size="lg" className="w-96">
-          Sign up
+        <Button size="lg" className="w-96" variant="primary">
+          Join 1000+ Developers on Rcmd
         </Button>
       </SignUpButton>
 
-      <p className="text-sm text-slate-400">
+      <p className="text-sm text-muted-foreground">
         Already have an account?{" "}
         <SignInButton>
           <a className="cursor-pointer font-medium text-slate-100 hover:underline">
@@ -42,19 +35,17 @@ function SignInCardFooter({ children }: { children: React.ReactNode }) {
           </a>
         </SignInButton>
       </p>
-    </>
+    </div>
   );
 }
 
-export function JoinTeamCard({
+export function JoinTeamButton({
   token,
   teamName,
-  invitedBy,
   onJoinedTeam,
 }: {
   token: string;
   teamName: string;
-  invitedBy: string;
   onJoinedTeam: (team: Team) => void;
 }) {
   const joinTeamMutation = api.teamInvites.joinTeam.useMutation({
@@ -73,28 +64,15 @@ export function JoinTeamCard({
   };
 
   return (
-    <Card className="p-5">
-      <CardHeader className="pb-0">
-        <h1 className="text-center text-2xl font-extrabold tracking-tight lg:text-3xl">
-          Join Team
-        </h1>
-      </CardHeader>
-      <CardContent className="py-20">
-        <p>{teamName}</p>
-        <p>Invited by {invitedBy}</p>
-      </CardContent>
-      <CardFooter className="flex flex-col justify-center gap-5">
-        <SignInCardFooter>
-          <Button
-            size="lg"
-            className="w-96"
-            onClick={onJoinTeam}
-            isLoading={joinTeamMutation.isLoading}
-          >
-            Join now
-          </Button>
-        </SignInCardFooter>
-      </CardFooter>
-    </Card>
+    <SignInCardFooter>
+      <Button
+        size="lg"
+        className="w-96"
+        onClick={onJoinTeam}
+        isLoading={joinTeamMutation.isLoading}
+      >
+        Join {teamName}
+      </Button>
+    </SignInCardFooter>
   );
 }
