@@ -13,6 +13,7 @@ import { SendInvitationEmailCard } from "~/components/team-invites/send-invitati
 import { Card, CardContent } from "~/components/ui/card";
 import { SidebarLayout } from "~/components/team-management/layout";
 import { Alert } from "~/components/ui/alert";
+import { GradientCard } from "~/components/ui/gradient-card";
 
 export default function MemberInvitePage({
   team,
@@ -44,21 +45,19 @@ export default function MemberInvitePage({
 
             <SendInvitationEmailCard teamId={team.id} teamName={team.name} />
 
-            <Card className="rounded-sm bg-gray-950 bg-gradient-to-br from-sky-950/40 py-6">
-              <CardContent className="flex items-center justify-between py-0">
-                <div className="flex flex-col gap-2">
-                  <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
-                    Create an invite link
-                  </h2>
-                  <div className="flex flex-col">
-                    <p className="text-md text-muted-foreground">
-                      You can create a unique invite link to share.
-                    </p>
-                  </div>
+            <GradientCard className="flex items-center justify-between">
+              <div className="flex flex-col gap-2">
+                <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
+                  Create an invite link
+                </h2>
+                <div className="flex flex-col">
+                  <p className="text-md text-muted-foreground">
+                    You can create a unique invite link to share.
+                  </p>
                 </div>
-                <CreateInviteLinkButton teamId={team.id} />
-              </CardContent>
-            </Card>
+              </div>
+              <CreateInviteLinkButton teamId={team.id} />
+            </GradientCard>
           </div>
         </SidebarLayout>
       </AppHeaderLayout>

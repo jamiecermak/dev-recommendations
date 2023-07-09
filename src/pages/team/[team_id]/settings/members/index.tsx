@@ -14,6 +14,7 @@ import { NextJSPageAuth } from "~/server/page-auth";
 import { AppHeaderLayout } from "~/components/layout/app-header";
 import { SidebarLayout } from "~/components/team-management/layout";
 import { Label } from "~/components/ui/label";
+import { GradientCard } from "~/components/ui/gradient-card";
 
 export default function SettingsPage({
   team,
@@ -37,42 +38,36 @@ export default function SettingsPage({
             </p>
           </div>
           <div className="my-5 border-t border-t-slate-800" />
-
           <div className="grid grid-cols-2 gap-5">
             {teamMembersQuery.data &&
               teamMembersQuery.data.map((teamMember) => (
-                <Card
-                  key={teamMember.user.id}
-                  className="rounded-sm bg-gray-950 bg-gradient-to-br from-sky-950/40 py-6"
-                >
-                  <CardContent className="flex flex-col py-0">
-                    <h2 className="text-lg font-semibold tracking-tight">
-                      {teamMember.user.name}
-                    </h2>
-                    <span className="mb-1 text-sm text-gray-400">
-                      {teamMember.user.emailAddress}
-                    </span>
-                    <div className="mt-2 flex gap-1">
-                      {teamMember.isOwner && (
-                        <Label colorScheme="indigo" size="xs">
-                          Owner
+                <GradientCard key={teamMember.user.id}>
+                  <h2 className="text-lg font-semibold tracking-tight">
+                    {teamMember.user.name}
+                  </h2>
+                  <span className="mb-1 text-sm text-gray-400">
+                    {teamMember.user.emailAddress}
+                  </span>
+                  <div className="mt-2 flex gap-1">
+                    {teamMember.isOwner && (
+                      <Label colorScheme="indigo" size="xs">
+                        Owner
+                      </Label>
+                    )}
+                    {teamMember.isAdmin && (
+                      <Label colorScheme="sky" size="xs">
+                        Admin
+                      </Label>
+                    )}
+                    {!teamMember.isAdmin &&
+                      !teamMember.isOwner &&
+                      teamMember.isActive && (
+                        <Label colorScheme="emerald" size="xs">
+                          Team Member
                         </Label>
                       )}
-                      {teamMember.isAdmin && (
-                        <Label colorScheme="sky" size="xs">
-                          Admin
-                        </Label>
-                      )}
-                      {!teamMember.isAdmin &&
-                        !teamMember.isOwner &&
-                        teamMember.isActive && (
-                          <Label colorScheme="emerald" size="xs">
-                            Team Member
-                          </Label>
-                        )}
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </GradientCard>
               ))}
           </div>
         </SidebarLayout>

@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import {
   Form,
   FormControl,
@@ -14,6 +13,7 @@ import { MailCheck } from "lucide-react";
 import { api } from "~/utils/api";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { GradientCard } from "../ui/gradient-card";
 
 const formSchema = z.object({
   emailAddress: z.string().email("Not a valid email address"),
@@ -53,35 +53,31 @@ export function SendInvitationEmailCard({
   };
 
   return (
-    <Card className="rounded-sm bg-gray-950 bg-gradient-to-br from-sky-950/40">
+    <GradientCard className="flex flex-col gap-6">
       <Form {...form}>
-        <CardHeader>
-          <div className="flex flex-col gap-2">
-            <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
-              Send an invitation email
-            </h2>
-            <p className="text-muted-foreground">
-              We will send your new team member an email inviting them to join{" "}
-              <span className="font-semibold">{teamName}</span>.
-            </p>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <FormField
-            control={form.control}
-            name="emailAddress"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email Address</FormLabel>
-                <FormControl>
-                  <Input className="py-6 text-lg" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </CardContent>
-        <CardFooter className="justify-end">
+        <div className="flex flex-col gap-2">
+          <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
+            Send an invitation email
+          </h2>
+          <p className="text-muted-foreground">
+            We will send your new team member an email inviting them to join{" "}
+            <span className="font-semibold">{teamName}</span>.
+          </p>
+        </div>
+        <FormField
+          control={form.control}
+          name="emailAddress"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email Address</FormLabel>
+              <FormControl>
+                <Input className="py-6 text-lg" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex justify-end">
           <Button
             size="lg"
             className="px-5"
@@ -91,8 +87,8 @@ export function SendInvitationEmailCard({
             <MailCheck size="20" className="mr-2" />
             Invite New Member
           </Button>
-        </CardFooter>
+        </div>
       </Form>
-    </Card>
+    </GradientCard>
   );
 }

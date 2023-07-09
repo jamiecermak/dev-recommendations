@@ -91,7 +91,7 @@ export function CreateTeamForm({
           )}
         />
       </div>
-      <div className="flex justify-end py-10">
+      <div className="flex justify-end pt-10">
         <Button
           size="lg"
           onClick={form.handleSubmit(onSubmit)}
