@@ -53,7 +53,7 @@ export function SendInvitationEmailCard({
   };
 
   return (
-    <Card className="bg-gray-900">
+    <Card className="rounded-sm bg-gray-950 bg-gradient-to-br from-sky-950/40">
       <Form {...form}>
         <CardHeader>
           <div className="flex flex-col gap-2">

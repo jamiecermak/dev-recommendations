@@ -55,7 +55,7 @@ export function CreateTeamForm({
 
   return (
     <Form {...form}>
-      <div className="flex flex-col gap-8  ">
+      <div className="flex flex-col gap-8">
         <FormField
           control={form.control}
           name="name"

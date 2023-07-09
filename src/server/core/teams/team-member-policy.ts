@@ -47,8 +47,11 @@ class TeamMemberPolicy {
       isActive: teamMember.isActive,
       isAdmin: teamMember.isAdmin,
       isOwner: this.isOwner(teamMember.user.id),
+      joinedAt: teamMember.joinedAt,
       user: {
         id: teamMember.user.id,
+        name: `${teamMember.user.firstName} ${teamMember.user.lastName}`,
+        emailAddress: teamMember.user.emailAddress,
       },
     }));
   }

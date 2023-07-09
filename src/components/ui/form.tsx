@@ -1,6 +1,7 @@
 import * as React from "react";
 import type * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
+import { FormLabel as FormFieldLabel } from "./form-label";
 import {
   Controller,
   type ControllerProps,
@@ -11,7 +12,6 @@ import {
 } from "react-hook-form";
 
 import { cn } from "~/utils/shad-cn";
-import { Label } from "./label";
 
 const Form = FormProvider;
 
@@ -91,7 +91,7 @@ const FormLabel = React.forwardRef<
   const { error, formItemId } = useFormField();
 
   return (
-    <Label
+    <FormFieldLabel
       ref={ref}
       className={cn(error && "text-red-700", className)}
       htmlFor={formItemId}

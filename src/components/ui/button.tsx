@@ -16,8 +16,8 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        secondary: "bg-indigo-600 text-indigo-50 shadow-sm hover:bg-indigo-500",
+        primary: "bg-sky-600 text-sky-50 shadow-sm hover:bg-sky-500",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
@@ -59,14 +59,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <Comp
-      className={cn(buttonVariants({ variant, size, className }))}
-      ref={ref}
-      {...props}
-      disabled={isLoading ? true : props.disabled}
-    >
-      {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-      {children}
-    </Comp>
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+        disabled={isLoading ? true : props.disabled}
+      >
+        {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+        {children}
+      </Comp>
     );
   }
 );

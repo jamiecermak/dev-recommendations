@@ -1,24 +1,40 @@
-import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
-import { cva, type VariantProps } from "class-variance-authority"
-
-import { cn } from "~/utils/shad-cn"
+import { type VariantProps, cva } from "class-variance-authority";
 
 const labelVariants = cva(
-  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-)
+  "rounded-md border bg-gradient-to-br font-medium uppercase",
+  {
+    variants: {
+      colorScheme: {
+        emerald: "from-emerald-600 to-emerald-800 text-emerald-100",
+        sky: "from-sky-600 to-sky-800 text-sky-100",
+        red: "from-red-600 to-red-800 text-red-100",
+        green: "from-green-600 to-green-800 text-green-100",
+        indigo: "from-indigo-600 to-indigo-800 text-indigo-100",
+      },
+      size: {
+        xs: "text-xs px-3 py-1",
+      },
+    },
+    defaultVariants: {
+      colorScheme: "sky",
+      size: "xs",
+    },
+  }
+);
 
-const Label = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
-    VariantProps<typeof labelVariants>
->(({ className, ...props }, ref) => (
-  <LabelPrimitive.Root
-    ref={ref}
-    className={cn(labelVariants(), className)}
-    {...props}
-  />
-))
-Label.displayName = LabelPrimitive.Root.displayName
+export interface LabelProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof labelVariants> {}
 
-export { Label }
+export function Label({
+  className,
+  colorScheme,
+  children,
+  ...props
+}: LabelProps) {
+  return (
+    <span className={labelVariants({ colorScheme, className })} {...props}>
+      {children}
+    </span>
+  );
+}

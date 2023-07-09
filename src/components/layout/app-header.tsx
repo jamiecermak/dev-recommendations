@@ -1,7 +1,7 @@
 import { cn } from "~/utils/shad-cn";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { Settings } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 import { SignInButton, SignOutButton } from "@clerk/nextjs";
 
 export interface AppHeaderLayoutProps
@@ -55,11 +55,11 @@ export function AppHeaderLayout({
           {!hideAppHeader && (
             <div className="flex gap-2">
               <Button variant="ghost" className="h-10 p-3 text-white">
-                <Settings className="h-5 w-5" />
+                <Settings className="h-4 w-4" />
               </Button>
               <SignOutButton>
-                <Button variant="outline" className="h-10 text-white">
-                  Sign out
+                <Button variant="outline" className="h-10 p-3 text-white">
+                  <LogOut className="h-4 w-4" />
                 </Button>
               </SignOutButton>
             </div>
@@ -82,7 +82,7 @@ export function AppHeaderLayout({
               "flex w-full max-w-4xl items-end justify-between px-5 py-6 xl:max-w-5xl xl:px-0"
             )}
           >
-            <h1 className="scroll-m-20  text-center text-3xl font-bold tracking-tight">
+            <h1 className="text-center text-3xl font-bold tracking-tight">
               {header}
             </h1>
             <div>{aside}</div>

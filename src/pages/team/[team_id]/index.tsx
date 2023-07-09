@@ -8,6 +8,9 @@ import { prisma } from "~/server/db";
 import { clerkClient } from "@clerk/nextjs/server";
 import { AppHeaderLayout } from "~/components/layout/app-header";
 import { NextJSPageAuth } from "~/server/page-auth";
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { Settings } from "lucide-react";
 
 export default function TeamDashboardPage({
   team,
@@ -18,7 +21,21 @@ export default function TeamDashboardPage({
         <title>{team.name} | Rcmd 👍</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppHeaderLayout header={team.name}>
+      <AppHeaderLayout
+        header={team.name}
+        aside={
+          <div className="flex gap-2">
+            <Link href={`/team/${team.id}/settings`}>
+              <Button variant="ghost">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </Link>
+            <Link href={`/team/${team.id}/post`}>
+              <Button variant="primary">Create Post</Button>
+            </Link>
+          </div>
+        }
+      >
         <h2 className="scroll-m-20 text-2xl font-semibold lg:text-2xl">
           Latest Posts
         </h2>

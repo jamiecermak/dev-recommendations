@@ -1,58 +1,50 @@
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
+import type { PropsWithChildren } from "react";
+import { Card, CardContent } from "./card";
 import { cn } from "~/utils/shad-cn";
 
-const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&:has(svg)]:pl-11 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
-  {
-    variants: {
-      variant: {
-        default: "bg-background text-foreground",
-        destructive:
-          "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
-      },
+const alertVariants = cva("rounded-sm py-5 bg-gray-900", {
+  variants: {
+    colorScheme: {
+      yellow: "border-yellow-700 bg-gradient-to-br from-yellow-950",
+      sky: "border-sky-700 bg-gradient-to-br from-sky-950",
+      red: "border-red-700 bg-gradient-to-br from-red-950",
+      green: "border-green-700 bg-gradient-to-br from-green-950",
     },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-);
+  },
+  defaultVariants: {
+    colorScheme: "sky",
+  },
+});
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn(alertVariants({ variant }), className)}
-    {...props}
-  />
-));
-Alert.displayName = "Alert";
+function AlertTitle({ children }: PropsWithChildren) {
+  return (
+    <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
+      {children}
+    </h2>
+  );
+}
 
-const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h5
-    ref={ref}
-    className={cn("mb-1 font-medium leading-none tracking-tight", className)}
-    {...props}
-  />
-));
-AlertTitle.displayName = "AlertTitle";
+function AlertDescription({ children }: PropsWithChildren) {
+  return <p className="text-md text-gray-200">{children}</p>;
+}
 
-const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm [&_p]:leading-relaxed", className)}
-    {...props}
-  />
-));
-AlertDescription.displayName = "AlertDescription";
+export interface AlertProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof alertVariants> {}
 
-export { Alert, AlertTitle, AlertDescription };
+export function Alert({
+  className,
+  colorScheme,
+  children,
+  ...props
+}: AlertProps) {
+  return (
+    <Card {...props} className={cn(alertVariants({ colorScheme, className }))}>
+      <CardContent className="flex flex-col gap-1 py-0">{children}</CardContent>
+    </Card>
+  );
+}
+
+Alert.Title = AlertTitle;
+Alert.Description = AlertDescription;
