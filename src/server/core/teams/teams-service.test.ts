@@ -88,3 +88,21 @@ describe("getting a team or throwing", () => {
     );
   });
 });
+
+describe("updating a team", () => {
+  it("should update the description", async () => {
+    mockPrisma.team.update.mockResolvedValue(teamFixture);
+
+    await expect(
+      teamsService.updateTeam(teamFixture, "new-description")
+    ).resolves.toEqual(teamFixture);
+    expect(mockPrisma.team.update).toHaveBeenCalledWith({
+      data: {
+        description: "new-description",
+      },
+      where: {
+        id: teamFixture.id,
+      },
+    });
+  });
+});

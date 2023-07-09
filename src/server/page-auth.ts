@@ -35,6 +35,7 @@ export class NextJSPageAuth {
           team: {
             id: team.id,
             name: team.name,
+            description: team.description,
           },
           user: {
             id: user.id,

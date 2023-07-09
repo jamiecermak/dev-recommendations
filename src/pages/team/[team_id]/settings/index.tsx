@@ -9,6 +9,8 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { NextJSPageAuth } from "~/server/page-auth";
 import { AppHeaderLayout } from "~/components/layout/app-header";
 import { SidebarLayout } from "~/components/team-management/layout";
+import { Card, CardContent } from "~/components/ui/card";
+import { UpdateTeamForm } from "~/components/teams/update-team-form";
 
 export default function SettingsPage({
   team,
@@ -28,6 +30,15 @@ export default function SettingsPage({
             </p>
           </div>
           <div className="my-5 border-t border-t-slate-800" />
+          <Card className="rounded-sm bg-gray-950 bg-gradient-to-br from-sky-950/40 py-6">
+            <CardContent className="flex flex-col py-0">
+              <UpdateTeamForm
+                teamId={team.id}
+                name={team.name}
+                description={team.description}
+              />
+            </CardContent>
+          </Card>
         </SidebarLayout>
       </AppHeaderLayout>
     </>

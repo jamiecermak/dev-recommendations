@@ -51,7 +51,7 @@ export default function MemberInvitePage({
                     Create an invite link
                   </h2>
                   <div className="flex flex-col">
-                    <p className="text-md text-gray-400">
+                    <p className="text-md text-muted-foreground">
                       You can create a unique invite link to share.
                     </p>
                   </div>

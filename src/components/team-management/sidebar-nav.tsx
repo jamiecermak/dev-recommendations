@@ -39,7 +39,7 @@ function SidebarNavGroup({
 }) {
   return (
     <div className="flex flex-col">
-      <span className="mb-3 text-xs font-medium uppercase text-gray-500">
+      <span className="mb-3 text-xs font-medium uppercase text-muted-foreground">
         {title}
       </span>
       <div className="flex flex-col gap-1">{children}</div>

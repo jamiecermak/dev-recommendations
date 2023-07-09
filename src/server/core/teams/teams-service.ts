@@ -1,4 +1,4 @@
-import type { User, PrismaClient } from "@prisma/client";
+import type { User, PrismaClient, Team } from "@prisma/client";
 
 class TeamsService {
   constructor(private prisma: PrismaClient) {}
@@ -20,6 +20,19 @@ class TeamsService {
     });
 
     return newTeam;
+  }
+
+  async updateTeam(team: Team, newDescription: string) {
+    const updatedTeam = await this.prisma.team.update({
+      data: {
+        description: newDescription,
+      },
+      where: {
+        id: team.id,
+      },
+    });
+
+    return updatedTeam;
   }
 
   async getById(id: string) {

@@ -60,7 +60,7 @@ export function SendInvitationEmailCard({
             <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
               Send an invitation email
             </h2>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               We will send your new team member an email inviting them to join{" "}
               <span className="font-semibold">{teamName}</span>.
             </p>
