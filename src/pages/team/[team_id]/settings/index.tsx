@@ -9,7 +9,6 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { NextJSPageAuth } from "~/server/page-auth";
 import { AppHeaderLayout } from "~/components/layout/app-header";
 import { SidebarLayout } from "~/components/team-management/layout";
-import { Card, CardContent } from "~/components/ui/card";
 import { UpdateTeamForm } from "~/components/teams/update-team-form";
 import { GradientCard } from "~/components/ui/gradient-card";
 

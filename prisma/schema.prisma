@@ -23,6 +23,8 @@ model User {
     createdTeams Team[]       @relation("CreatedTeams")
     ownedTeams   Team[]       @relation("OwnedTeams")
     InviteCodes  InviteCode[]
+    createdPosts Post[]       @relation("CreatedPosts")
+    updatedPosts Post[]       @relation("UpdatedPosts")
 
     @@unique(clerkId)
     @@map("users")
@@ -40,7 +42,8 @@ model Team {
 
     createdByUser User         @relation("CreatedTeams", fields: [createdByUserId], references: [id])
     ownedByUser   User         @relation("OwnedTeams", fields: [ownedByUserId], references: [id])
-    InviteCode    InviteCode[]
+    inviteCodes   InviteCode[]
+    posts         Post[]
 
     @@map("teams")
 }
@@ -78,4 +81,52 @@ model InviteCode {
 
     @@unique(token)
     @@map("invite_codes")
+}
+
+model Post {
+    id              String   @id @default(cuid())
+    teamId          String   @map("team_id")
+    title           String   @map("title")
+    description     String   @map("description")
+    href            String   @map("href")
+    postTypeId      String   @map("post_type_id")
+    createdByUserId String   @map("created_by_user_id")
+    updatedByUserId String   @map("updated_by_user_id")
+    createdAt       DateTime @default(now()) @map("created_at")
+    updatedAt       DateTime @updatedAt @map("updated_at")
+
+    team          Team      @relation(fields: [teamId], references: [id])
+    createdByUser User      @relation("CreatedPosts", fields: [createdByUserId], references: [id])
+    updatedByUser User      @relation("UpdatedPosts", fields: [updatedByUserId], references: [id])
+    postType      PostType  @relation(fields: [postTypeId], references: [id])
+    postTags      PostTag[]
+
+    @@map("posts")
+}
+
+model PostType {
+    id    String @id @default(cuid())
+    name  String @map("name")
+    posts Post[]
+
+    @@map("post_types")
+}
+
+model PostTag {
+    postId String @map("post_id")
+    tagId  String @map("tag_id")
+
+    post Post @relation(fields: [postId], references: [id])
+    tag  Tag  @relation(fields: [tagId], references: [id])
+
+    @@id([postId, tagId])
+    @@map("post_tags")
+}
+
+model Tag {
+    id       String    @id @default(cuid())
+    name     String    @map("name")
+    postTags PostTag[]
+
+    @@map("tags")
 }

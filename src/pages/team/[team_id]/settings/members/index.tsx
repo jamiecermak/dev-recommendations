@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import Head from "next/head";
-import { Card, CardContent } from "~/components/ui/card";
-import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import type {
   GetServerSidePropsContext,

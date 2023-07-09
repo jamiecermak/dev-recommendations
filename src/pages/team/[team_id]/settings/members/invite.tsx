@@ -10,7 +10,6 @@ import { AppHeaderLayout } from "~/components/layout/app-header";
 import { CreateInviteLinkButton } from "~/components/team-invites/create-invite-link-button";
 import { NextJSPageAuth } from "~/server/page-auth";
 import { SendInvitationEmailCard } from "~/components/team-invites/send-invitation-email-card";
-import { Card, CardContent } from "~/components/ui/card";
 import { SidebarLayout } from "~/components/team-management/layout";
 import { Alert } from "~/components/ui/alert";
 import { GradientCard } from "~/components/ui/gradient-card";
