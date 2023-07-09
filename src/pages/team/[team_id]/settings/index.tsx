@@ -20,7 +20,15 @@ export default function SettingsPage({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppHeaderLayout header="Team Management">
-        <SidebarLayout teamId={team.id}></SidebarLayout>
+        <SidebarLayout teamId={team.id}>
+          <div>
+            <h3 className="text-lg font-medium">Team Info</h3>
+            <p className="text-sm text-muted-foreground">
+              Change your teams description and more.
+            </p>
+          </div>
+          <div className="my-5 border-t border-t-slate-800" />
+        </SidebarLayout>
       </AppHeaderLayout>
     </>
   );

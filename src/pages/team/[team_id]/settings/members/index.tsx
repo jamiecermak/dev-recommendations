@@ -30,6 +30,14 @@ export default function SettingsPage({
       </Head>
       <AppHeaderLayout header="Team Management">
         <SidebarLayout teamId={team.id}>
+          <div>
+            <h3 className="text-lg font-medium">Team Members</h3>
+            <p className="text-sm text-muted-foreground">
+              Manage your team members.
+            </p>
+          </div>
+          <div className="my-5 border-t border-t-slate-800" />
+
           <div className="grid grid-cols-2 gap-5">
             {teamMembersQuery.data &&
               teamMembersQuery.data.map((teamMember) => (

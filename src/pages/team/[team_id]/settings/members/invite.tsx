@@ -24,32 +24,42 @@ export default function MemberInvitePage({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppHeaderLayout header="Team Management" className="gap-6">
-        <SidebarLayout teamId={team.id} className="flex flex-col gap-6">
-          <Alert colorScheme="yellow">
-            <Alert.Title>Heads up!</Alert.Title>
-            <Alert.Description>
-              Invite links will expire after 7 days, can only be used once, and
-              can not be revoked.
-            </Alert.Description>
-          </Alert>
+        <SidebarLayout teamId={team.id} className="flex flex-col">
+          <div>
+            <h3 className="text-lg font-medium">Invitations</h3>
+            <p className="text-sm text-muted-foreground">
+              Invite more of your team mates. You can have an unlimited amount
+              of team members.
+            </p>
+          </div>
+          <div className="my-5 border-t border-t-slate-800" />
+          <div className="flex flex-col gap-6">
+            <Alert colorScheme="yellow">
+              <Alert.Title>Heads up!</Alert.Title>
+              <Alert.Description>
+                Invite links will expire after 7 days, can only be used once,
+                and can not be revoked.
+              </Alert.Description>
+            </Alert>
 
-          <SendInvitationEmailCard teamId={team.id} teamName={team.name} />
+            <SendInvitationEmailCard teamId={team.id} teamName={team.name} />
 
-          <Card className="rounded-sm bg-gray-950 bg-gradient-to-br from-sky-950/40 py-6">
-            <CardContent className="flex items-center justify-between py-0">
-              <div className="flex flex-col gap-2">
-                <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
-                  Create an invite link
-                </h2>
-                <div className="flex flex-col">
-                  <p className="text-md text-gray-400">
-                    You can create a unique invite link to share.
-                  </p>
+            <Card className="rounded-sm bg-gray-950 bg-gradient-to-br from-sky-950/40 py-6">
+              <CardContent className="flex items-center justify-between py-0">
+                <div className="flex flex-col gap-2">
+                  <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
+                    Create an invite link
+                  </h2>
+                  <div className="flex flex-col">
+                    <p className="text-md text-gray-400">
+                      You can create a unique invite link to share.
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <CreateInviteLinkButton teamId={team.id} />
-            </CardContent>
-          </Card>
+                <CreateInviteLinkButton teamId={team.id} />
+              </CardContent>
+            </Card>
+          </div>
         </SidebarLayout>
       </AppHeaderLayout>
     </>
