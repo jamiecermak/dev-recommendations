@@ -5,6 +5,7 @@ import { teamInvitesRouter } from "./routers/team-invites";
 import { tagsRouter } from "./routers/tags";
 import { postTypesRouter } from "./routers/post-types";
 import { postsRouter } from "./routers/posts";
+import { postDiscoveryRouter } from "./routers/post-discovery";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   tags: tagsRouter,
   postTypes: postTypesRouter,
   posts: postsRouter,
+  postDiscovery: postDiscoveryRouter,
 });
 
 // export type definition of API

@@ -44,19 +44,4 @@ export const postsRouter = createTRPCRouter({
         tags: input.tags,
       });
     }),
-  getLatestByTeam: protectedProcedure
-    .input(
-      z.object({
-        teamId: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { team } =
-        await ctx.services.authGuard.authoriseByTeamMemberWithUser(
-          ctx.user,
-          input.teamId
-        );
-
-      return ctx.services.posts.getLatestByTeam(team);
-    }),
 });

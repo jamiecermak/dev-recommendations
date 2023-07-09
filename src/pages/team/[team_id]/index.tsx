@@ -17,9 +17,11 @@ import { Label } from "~/components/ui/label";
 export default function TeamDashboardPage({
   team,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const latestPostsQuery = api.posts.getLatestByTeam.useQuery({
+  const latestPostsQuery = api.postDiscovery.getLatestByTeam.useQuery({
     teamId: team.id,
   });
+
+  const allPostsQuery = api.postDiscovery.getLatestAllTeams.useQuery();
 
   return (
     <>
@@ -66,6 +68,24 @@ export default function TeamDashboardPage({
         <h2 className="scroll-m-20 text-2xl font-semibold lg:text-2xl">
           Popular this week
         </h2>
+        {allPostsQuery.data &&
+          allPostsQuery.data.map((post) => (
+            <div key={post.id}>
+              <p>{post.title}</p>
+              <p>{post.description}</p>
+              <p>{post.href}</p>
+              <p>
+                {post.createdByUserFirstName} {post.createdByUserLastName}
+              </p>
+              <p>{post.createdAt.toISOString()}</p>
+              <p>{post.postType.name}</p>
+              <p>
+                {post.tags.map((tag) => (
+                  <Label key={tag.id}>{tag.name}</Label>
+                ))}
+              </p>
+            </div>
+          ))}
         <h2 className="scroll-m-20 text-2xl font-semibold lg:text-2xl">
           Top rated all time
         </h2>

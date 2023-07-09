@@ -14,6 +14,7 @@ import { EmailTemplateService } from "./core/email-templates/template-service";
 import { TagService } from "./core/posts/tag-service";
 import { PostTypeService } from "./core/posts/post-type-service";
 import { PostService } from "./core/posts/post-service";
+import { PostDiscoveryService } from "./core/posts/discovery-service";
 
 function getBaseUrl() {
   if (env.RCMD_DEV_BASE_URL !== undefined)
@@ -43,6 +44,7 @@ export function getServices(
   const tags = new TagService(prismaClient);
   const postTypes = new PostTypeService(prismaClient);
   const posts = new PostService(prismaClient, teamMember);
+  const postDiscovery = new PostDiscoveryService(prismaClient);
 
   const authGuard = new AuthGuard(clerkUser, teams, teamMember);
   const clerkWebhook = new ClerkWebhookService(clerkUser);
@@ -62,5 +64,6 @@ export function getServices(
     tags,
     postTypes,
     posts,
+    postDiscovery,
   };
 }
