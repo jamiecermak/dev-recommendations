@@ -12,13 +12,13 @@ import { prisma } from "~/server/db";
 import { NextJSPageAuth } from "~/server/page-auth";
 import { getServices } from "~/server/service-builder";
 
-export default function CreateTeamPage({
+export default function CreatePostPage({
   team,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
 
-  const handleNewTeamCreated = (id: string) => {
-    void router.push(`/team/${id}`);
+  const handleNewTeamCreated = () => {
+    void router.push(`/team/${team.id}`);
   };
 
   return (

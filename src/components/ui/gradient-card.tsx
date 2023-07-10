@@ -8,6 +8,7 @@ const gradientCardVariants = cva("rounded-sm bg-gray-950 p-6", {
       sky: "bg-gradient-to-br from-sky-950/40",
       red: "bg-gradient-to-br from-red-950/40",
       green: "border-green-700 bg-gradient-to-br from-green-950",
+      indigo: "bg-gradient-to-br from-indigo-950",
     },
   },
   defaultVariants: {

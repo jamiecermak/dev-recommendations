@@ -18,7 +18,7 @@ export default function CreateTeamPage() {
         header="Your Teams"
         aside={
           <Link href="/team/create">
-            <Button variant="secondary">Create Team</Button>
+            <Button variant="primary">Create Team</Button>
           </Link>
         }
       >

@@ -1,7 +1,7 @@
 import { cn } from "~/utils/shad-cn";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { SignInButton, SignOutButton } from "@clerk/nextjs";
 
 export interface AppHeaderLayoutProps
@@ -24,15 +24,11 @@ export function AppHeaderLayout({
       <nav className="flex h-18 w-full justify-center bg-black">
         <div className="flex w-full max-w-4xl items-center justify-between px-5 xl:max-w-5xl xl:px-0">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold">Rcmd 👍 </h1>
+            <Link href="/teams">
+              <h1 className="select-none text-2xl font-bold">Rcmd 👍 </h1>
+            </Link>
             {!hideAppHeader && (
               <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  className="h-10 px-3 font-semibold text-white"
-                >
-                  New & Noteworthy
-                </Button>
                 <Link href="/teams">
                   <Button
                     variant="ghost"
@@ -41,22 +37,11 @@ export function AppHeaderLayout({
                     Teams
                   </Button>
                 </Link>
-                <Link href="/team/create">
-                  <Button
-                    variant="ghost"
-                    className="h-10 px-3 font-semibold text-white"
-                  >
-                    Create
-                  </Button>
-                </Link>
               </div>
             )}
           </div>
           {!hideAppHeader && (
             <div className="flex gap-2">
-              <Button variant="ghost" className="h-10 p-3 text-white">
-                <Settings className="h-4 w-4" />
-              </Button>
               <SignOutButton>
                 <Button variant="outline" className="h-10 p-3 text-white">
                   <LogOut className="h-4 w-4" />

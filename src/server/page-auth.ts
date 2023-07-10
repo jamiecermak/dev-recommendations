@@ -24,11 +24,8 @@ export class NextJSPageAuth {
       const auth = getAuth(context.req);
       const userId = auth.userId ?? null;
 
-      const { team, user } = await this.authGuard.authoriseByTeamMember(
-        userId,
-        teamId,
-        opts
-      );
+      const { team, user, teamMemberPolicy } =
+        await this.authGuard.authoriseByTeamMember(userId, teamId, opts);
 
       return {
         props: {
@@ -39,6 +36,10 @@ export class NextJSPageAuth {
           },
           user: {
             id: user.id,
+          },
+          membership: {
+            isAdmin: teamMemberPolicy.isAdmin(user.id),
+            isOwner: teamMemberPolicy.isOwner(user.id),
           },
         },
       };

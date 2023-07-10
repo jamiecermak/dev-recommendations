@@ -34,8 +34,8 @@ export function TeamCard({
   return (
     <Card
       className={cn(
-        `group/team rounded-sm bg-gray-950 py-0 shadow-md transition-all`,
-        isClickable && `hover:translate-x-1`,
+        `group rounded-sm bg-gray-950 py-0 shadow-md transition-all`,
+        isClickable && `hover:border-indigo-800`,
         className
       )}
       {...props}
@@ -59,7 +59,7 @@ export function TeamCard({
             )}
           </div>
         </div>
-        <div className="flex rounded-b-sm border-t border-t-gray-800 bg-gray-950 bg-gradient-to-br from-sky-950/60 px-5 py-5 pt-6">
+        <div className="flex rounded-b-sm border-t border-t-gray-800 bg-gray-950 bg-gradient-to-br from-indigo-950/60 px-5 py-5 pt-6">
           <div className="flex flex-grow flex-col">
             <h2 className="mb-1 text-lg font-semibold tracking-tight">
               {teamName}
@@ -80,7 +80,7 @@ export function TeamCard({
           </div>
           <div>
             {isClickable && (
-              <ArrowRight className="text-sky-200 opacity-0 transition-all group-hover/team:translate-x-1 group-hover/team:opacity-40" />
+              <ArrowRight className="text-sky-200 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-40" />
             )}
           </div>
         </div>

@@ -45,12 +45,12 @@ export default function MemberInvitePage({
             <SendInvitationEmailCard teamId={team.id} teamName={team.name} />
 
             <GradientCard className="flex items-center justify-between">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col">
                 <h2 className="scroll-m-20  text-lg font-semibold tracking-tight">
                   Create an invite link
                 </h2>
                 <div className="flex flex-col">
-                  <p className="text-md text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     You can create a unique invite link to share.
                   </p>
                 </div>

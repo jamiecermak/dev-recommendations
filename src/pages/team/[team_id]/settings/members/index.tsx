@@ -42,7 +42,7 @@ export default function SettingsPage({
                   <h2 className="text-lg font-semibold tracking-tight">
                     {teamMember.user.name}
                   </h2>
-                  <span className="mb-1 text-sm text-gray-400">
+                  <span className="mb-1 text-sm text-muted-foreground">
                     {teamMember.user.emailAddress}
                   </span>
                   <div className="mt-2 flex gap-1">

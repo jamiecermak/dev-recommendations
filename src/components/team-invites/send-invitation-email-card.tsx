@@ -55,11 +55,11 @@ export function SendInvitationEmailCard({
   return (
     <GradientCard className="flex flex-col gap-6">
       <Form {...form}>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           <h2 className="text-lg font-semibold tracking-tight">
             Send an invitation email
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             We will send your new team member an email inviting them to join{" "}
             <span className="font-semibold">{teamName}</span>.
           </p>

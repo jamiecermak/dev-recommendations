@@ -12,16 +12,15 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { Settings } from "lucide-react";
 import { api } from "~/utils/api";
-import { Label } from "~/components/ui/label";
+import { PostItemCard } from "~/components/posts/post-item-card";
 
 export default function TeamDashboardPage({
   team,
+  membership: { isAdmin },
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const latestPostsQuery = api.postDiscovery.getLatestByTeam.useQuery({
     teamId: team.id,
   });
-
-  const allPostsQuery = api.postDiscovery.getLatestAllTeams.useQuery();
 
   return (
     <>
@@ -33,62 +32,31 @@ export default function TeamDashboardPage({
         header={team.name}
         aside={
           <div className="flex gap-2">
-            <Link href={`/team/${team.id}/settings`}>
-              <Button variant="ghost">
-                <Settings className="h-5 w-5" />
-              </Button>
-            </Link>
+            {isAdmin && (
+              <Link href={`/team/${team.id}/settings`}>
+                <Button variant="ghost" size="icon">
+                  <Settings className="h-5 w-5" />
+                </Button>
+              </Link>
+            )}
+
             <Link href={`/team/${team.id}/post`}>
               <Button variant="primary">Create Post</Button>
             </Link>
           </div>
         }
       >
-        <h2 className="scroll-m-20 text-2xl font-semibold lg:text-2xl">
+        <h2 className="mb-7 scroll-m-20 text-2xl font-semibold lg:text-2xl">
           Latest Posts
         </h2>
-        {latestPostsQuery.data &&
-          latestPostsQuery.data.map((post) => (
-            <div key={post.id}>
-              <p>{post.title}</p>
-              <p>{post.description}</p>
-              <p>{post.href}</p>
-              <p>
-                {post.createdByUserFirstName} {post.createdByUserLastName}
-              </p>
-              <p>{post.createdAt.toISOString()}</p>
-              <p>{post.postType.name}</p>
-              <p>
-                {post.tags.map((tag) => (
-                  <Label key={tag.id}>{tag.name}</Label>
-                ))}
-              </p>
-            </div>
-          ))}
-        <h2 className="scroll-m-20 text-2xl font-semibold lg:text-2xl">
-          Popular this week
-        </h2>
-        {allPostsQuery.data &&
-          allPostsQuery.data.map((post) => (
-            <div key={post.id}>
-              <p>{post.title}</p>
-              <p>{post.description}</p>
-              <p>{post.href}</p>
-              <p>
-                {post.createdByUserFirstName} {post.createdByUserLastName}
-              </p>
-              <p>{post.createdAt.toISOString()}</p>
-              <p>{post.postType.name}</p>
-              <p>
-                {post.tags.map((tag) => (
-                  <Label key={tag.id}>{tag.name}</Label>
-                ))}
-              </p>
-            </div>
-          ))}
-        <h2 className="scroll-m-20 text-2xl font-semibold lg:text-2xl">
-          Top rated all time
-        </h2>
+        <div className="grid grid-cols-1 gap-5">
+          {latestPostsQuery.data &&
+            latestPostsQuery.data.map((post) => (
+              <Link key={post.id} href={post.href}>
+                <PostItemCard post={post} />
+              </Link>
+            ))}
+        </div>
       </AppHeaderLayout>
     </>
   );
